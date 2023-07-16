@@ -1,0 +1,485 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block nav1%}
+		<a id="mobile_btn" href="javascript:void(0);">
+			<span class="bar-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</a>
+{%endblock%}
+
+{%block nav2%}
+    {%include 'includes/nav_doctor.html'%}
+{%endblock%}
+
+{%block nav3%}
+    {%include 'includes/header_doctor.html'%}
+{%endblock%}
+
+{%block breadcrumb%}
+<div class="breadcrumb-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{%url 'H_doctor'%}">Acceuil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Paramètre du profile</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title">Paramètres du profile</h2>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block content%}
+{%include 'messages.html'%}
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+            
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="widget-profile pro-widget-content">
+                        <div class="profile-info-widget">
+                            <a href="{{u.img_medecin.url}}" class="booking-doc-img">
+                                <img src="{{u.img_medecin.url}}" alt="User Image">
+                            </a>
+                            <div class="profile-det-info">
+                                <h3>{{u.NomCabinet}}</h3>
+                                <div class="patient-details">
+                                    <h5 class="mb-0">{{u.addresse}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-widget">
+                        <nav class="dashboard-menu">
+                            <ul>
+                                <li>
+                                    <a href="{%url 'Dashboard'%}">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'D_RV_LIST'%}">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>RDVs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetPatientList'%}">
+                                        <i class="fas fa-user-injured"></i>
+                                        <span>Patients</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetTimingSchedual'%}">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        <span>Horaire</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetAvis'%}">
+                                        <i class="fas fa-star"></i>
+                                        <span>Avis</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="{%url 'profile_doctor'%}">
+                                        <i class="fas fa-user-cog"></i>
+                                        <span>Paramètres du profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'Logout'%}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /Profile Sidebar -->
+                
+            </div>
+            <div class="col-md-7 col-lg-8 col-xl-9">
+            
+                <!-- Basic Information -->
+            <form method="POST" action="{%url 'update_profil_doctor'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body">
+                            <h4 class="card-title">informations générales</h4>
+                            <div class="row form-row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="change-avatar">
+                                            <div class="profile-img">
+                                                <img src="{{u.img_medecin.url}}" alt="User Image">
+                                            </div>
+                                            <div class="upload-img">
+                                                <div class="change-photo-btn">
+                                                    <span><i class="fa fa-upload"></i> Upload Photo</span>
+                                                    <input type="file" class="upload" name="img_medecin">
+                                                </div>
+                                                <!-- <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" value="{{u.email}}" name="email" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Numéro Téléphone</label>
+                                        <input type="text" class="form-control" name="telephone" value="{{u.telephone}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nom <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="nom_medecin" value="{{u.nom_medecin}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Prénom <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" value="{{u.prenom_medecin}}" name="prenom_medecin">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Genre</label>
+                                        <select class="form-control select" name="genre">
+                                            <!-- <option value="None">Select</option> -->
+                                            {%if u.genre == "male"%}
+                                                <option selected>male</option>
+                                                <option>female</option>
+                                            {%elif u.genre == "female"%}
+                                                <option>male</option>
+                                                <option selected>female</option>
+                                            {%else%}
+                                                <option>male</option>
+                                                <option>female</option>
+                                            {%endif%}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-0">
+                                        <label>Date de naissance</label>
+                                        <div class="cal-icon">
+                                            <input type="text" class="form-control datetimepicker" name="date_naiss" value="{{u.changeFormat}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <!-- /Basic Information -->
+                
+                <!-- About Me -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">A propos de moi</h4>
+                        <div class="form-group mb-0">
+                            <label>Biographie</label>
+                            <textarea class="form-control" rows="5" name="biographie" placeholder="tell us more about your self">{{u.biographie}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- /About Me -->
+                
+                <!-- Clinic Info -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Informations de la cabinet</h4>
+                        <div class="row form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nom de la cabinet</label>
+                                    <input type="text" class="form-control" name="NomCabinet" value="{{u.NomCabinet}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Addresse de la Cabinet</label>
+                                    <input type="text" class="form-control" name="addresse" value="{{u.addresse}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Wilaya</label>
+                                    <select class="form-select select select-control select-option" name="wilaya" onchange="getCommune()" aria-label="Default select example" id="select" name="wilaya">
+                                        <!-- <option>select</option> -->
+                                        {%for wilaya in w%}
+                                            {% if wilaya.wilaya == u.wilaya.wilaya%}
+                                            <option value="{{wilaya.id}}" selected>{{wilaya.wilaya}}</option>
+                                            {%else%}
+                                            <option value="{{wilaya.id}}">{{wilaya.wilaya}}</option>
+                                            {%endif%}
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label>Commune</label>
+                                    <select class="form-select select-control select-option select" aria-label="Default select example" id="select_commune" name="commune">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label>Adresse google maps</label>
+                                        <a href="#howTo" data-toggle="modal"><i class="fas fa-question-circle"></i></a>
+                                    </div>
+                                    <input type="text" class="form-control" name="googlemaps_iframe" value="{{u.googlemaps_iframe}}">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Images de la Cabinet</label>
+                                    <!-- <form action="#" class="dropzone"></form> -->
+                                </div>
+                                <div class="upload-wrap">
+                                    <div class="upload-images">
+                                        <img src="{{u.img1.url}}" alt="Upload Image">
+                                            <a href="{%url 'DelImg' 1%}" class="btn  btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                            <div class="change-photo-btn btn-icon btn-icon2">
+                                                <span><i class="fa fa-edit"></i></span>
+                                                <input type="file" class="upload" name="img1">
+                                            </div>
+                                    </div>
+                                    <div class="upload-images">
+                                        <img src="{{u.img2.url}}" alt="Upload Image">
+                                        <a href="{%url 'DelImg' 2%}" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                        <div class="change-photo-btn btn-icon btn-icon2">
+                                            <span><i class="fa fa-edit"></i></span>
+                                            <input type="file" class="upload" name="img2">
+                                        </div>
+                                    </div>
+                                    <div class="upload-images">
+                                        <img src="{{u.img3.url}}" alt="Upload Image">
+                                        <a href="{%url 'DelImg' 3%}" class="btn btn-icon btn-danger btn-sm"><i class="far fa-trash-alt"></i></a>
+                                        <div class="change-photo-btn btn-icon btn-icon2">
+                                            <span><i class="fa fa-edit"></i></span>
+                                            <input type="file" class="upload" name="img3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Clinic Info -->
+
+                <!-- Specialization -->
+                <div class="card services-card">
+                    <div class="card-body">
+                        <h4 class="card-title">Spécialization</h4>
+                        <select class="form-control select" name="specialite" onchange="getCommune()">
+                            <option>Select</option>
+                            {%for specialite in s%}
+                                {%if specialite == u.specialite%}
+                                    <option value="{{specialite.id}}" selected>{{specialite.specialite}}</option>
+                                {%else%}
+                                    <option value="{{specialite.id}}">{{specialite.specialite}}</option>
+                                {%endif%}
+                            {%endfor%}
+                        </select>
+                    </div>              
+                </div>
+                <!-- /Specialization -->
+             
+                <div class="submit-section submit-btn-bottom">
+                    <button type="submit" class="btn btn-primary submit-btn">Sauvgarder</button>
+                    <!-- <a type="submit" class="btn btn-primary submit-btn" href="{%url 'update_profil_doctor'%}">Save Changes</a> -->
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block PlugIn%}
+<div class="modal fade custom-modal" id="howTo">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Comment intégrer google map</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="{%static 'assets/img/steps/step-1.JPG'%}" width="100%" alt="step" style="margin-bottom: 20px; border: 1px solid black;">
+                <img src="{%static 'assets/img/steps/step-2.JPG'%}" width="100%" alt="step" style="margin-bottom: 20px; border: 1px solid black;">
+                <img src="{%static 'assets/img/steps/step-3.JPG'%}" width="100%" alt="step" style="margin-bottom: 20px; border: 1px solid black;">
+                <img src="{%static 'assets/img/steps/step-4.JPG'%}" width="100%" alt="step" style="margin-bottom: 20px; border: 1px solid black;">
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- profile setings -->
+<script>
+    var communes = JSON.parse('{{c|safe}}');
+    var user = JSON.parse('{{u_json|safe}}');
+    var element_commune = document.getElementById('select_commune');
+    var element_wilaya = document.getElementById('select');
+    choice = element_wilaya.options[element_wilaya.selectedIndex].value;
+    for(let i=0;i<communes.length;i++){
+         if(communes[i].fields.wilaya == choice){
+             option = document.createElement("option");
+             option.textContent = communes[i].fields.commune;
+             option.value = communes[i].pk;
+             if(user[0].fields.commune == communes[i].pk){
+                option.selected = true;
+             }
+             element_commune.appendChild(option);
+         }
+    }
+    function removeAll(){
+        while (element_commune.options.length > 0) {
+            element_commune.remove(0);
+        }
+    }
+    function getCommune(){
+        removeAll();
+        choice = element_wilaya.options[element_wilaya.selectedIndex].value;
+        for(let i=0;i<communes.length;i++){
+         if(communes[i].fields.wilaya == choice){
+             option = document.createElement("option");
+             option.textContent = communes[i].fields.commune;
+             option.value = communes[i].pk;
+             if(user[0].fields.commune == communes[i].pk){
+                option.selected = true;
+             }
+             element_commune.appendChild(option);
+         }
+    }
+    }
+</script>
+
+<!-- notifications scripts -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm" style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!-- /notifications scripts -->
+
+<!-- side nav bar script -->
+<script>
+    var extras = document.getElementsByClassName('extra');
+    var w = window.innerWidth;
+    for(let i=0;i<extras.length;i++){
+        if(w <= 575){
+        extras[i].style.display = "list-item";
+        }
+        else{
+            extras[i].style.display = "none";
+        }
+    }
+    function addElementNav(){
+        var w = window.innerWidth;
+            var extras = document.getElementsByClassName('extra');
+            for(let i=0;i<extras.length;i++){
+                if(w <= 575){
+                extras[i].style.display = "list-item";
+                }
+                else{
+                    extras[i].style.display = "none";
+                }
+            }
+    }
+</script>
+{%endblock%}

@@ -1,0 +1,59 @@
+{% extends 'base.html'%} 
+{%load static%}
+
+{%block nav3%}
+	<li class="nav-item">
+		<a class="nav-link header-login" href="{%url 'Login'%}">Login / Signup </a>
+	</li>
+{%endblock%}
+
+{%block Breadcrumb%}
+				<!-- Home Banner -->
+				<section class="section section-search">
+					<div class="container-fluid">
+						<div class="banner-wrapper">
+							<div class="banner-header text-center">
+								<h1>Rechercher un médecin, prendre rendez-vous</h1>
+								<p>Découvrir les meuilleures médecins, à la ville la plus proche à vous.</p>
+							</div>
+							
+							<!-- Search -->
+							<div class="search-box">
+								<form action="{%url 'cherCabinet'%}" class="justify-content-center" method="GET">
+									<div class="form-group">
+										<!-- there was an id named select here  -->
+										<select class="form-control select" aria-label="Default select example" name="wilaya"> 
+											<option>Wilaya</option>
+											{%for wilaya in w%}
+											<option value="{{wilaya.wilaya}}">{{wilaya.wilaya}}</option>
+											{%endfor%}
+										</select>
+										<span class="form-text">choisir la wilaya</span>
+									</div>
+									<div class="form-group">
+										<!-- there was an id named select here  -->
+										<select class="form-control select" aria-label="Default select example" name="specialite">
+											<option>Spécialité</option>
+											{%for spec in s%}
+											<option value="{{spec.specialite}}">{{spec.specialite}}</option>
+											{%endfor%}
+										</select>
+										<span class="form-text">choisir la spécialité</span>
+									</div>
+									<div class="form-group search-info">
+										<input type="text" class="form-control" placeholder="Chercher médecins et cabinets" name="nomCabinet">
+										<span class="form-text">Ex : Dr mohamed or Dr Eslem etc</span>
+									</div>
+									<button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i> <span>Search</span></button>
+								</form>
+							</div>
+
+							<!-- /Search -->
+							<!-- <div>
+								{{context}}
+							</div> -->
+						</div>
+					</div>
+				</section>
+				<!-- /Home Banner -->
+			{%endblock%}

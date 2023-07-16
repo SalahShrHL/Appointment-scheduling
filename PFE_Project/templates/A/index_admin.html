@@ -1,0 +1,252 @@
+{%extends 'A/base.html'%}
+{%load static%}
+
+{%block sideBar%} 
+	<li class="active"> 
+		<a href="{%url 'H_admin'%}"><i class="fas fa-home" style="font-size: 20px;"></i> <span>Dashboard</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'specialitesAdmin'%}"><i class="fas fa-users" style="font-size: 20px;"></i> <span>Specialities</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'DoctorsAdmin'%}"><i class="fas fa-user-plus" style="font-size: 20px;"></i> <span>Médecins</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'PatientsAdmin'%}"><i class="fas fa-user" style="font-size: 20px;"></i> <span>Patients</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'Logout'%}"><i class="fas fa-sign-out-alt" style="font-size: 20px;"></i> <span>Logout</span></a>
+	</li>
+{%endblock%}
+
+{%block content%}
+	<div class="page-wrapper">
+				
+		<div class="content container-fluid">
+			{%include 'messages.html'%}
+			<!-- Page Header -->
+			<div class="page-header">
+				<div class="row">
+					<div class="col-sm-12">
+						<h3 class="page-title">Bienvenu Administrateur!</h3>
+						<ul class="breadcrumb">
+							<li class="breadcrumb-item active">Dashboard</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /Page Header -->
+
+			<div class="row">
+				<div class="col-xl-3 col-sm-6 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="dash-widget-header">
+								<span class="dash-widget-icon text-primary border-primary">
+									<i class="fas fa-users" style="font-size: 23px;"></i>
+								</span>
+								<div class="dash-count">
+									<h3>{{medecin_total}}</h3>
+								</div>
+							</div>
+							<div class="dash-widget-info">
+								<h6 class="text-muted">Médecins</h6>
+								<div class="progress progress-sm">
+									<div class="progress-bar bg-primary w-50"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-6 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="dash-widget-header">
+								<span class="dash-widget-icon text-success">
+									<i class="fas fa-credit-card" style="font-size: 23px;"></i>
+								</span>
+								<div class="dash-count">
+									<h3>{{patient_total}}</h3>
+								</div>
+							</div>
+							<div class="dash-widget-info">
+								
+								<h6 class="text-muted">Patients</h6>
+								<div class="progress progress-sm">
+									<div class="progress-bar bg-success w-50"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-6 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="dash-widget-header">
+								<span class="dash-widget-icon text-danger border-danger">
+									<i class="fas fa-money-bill" style="font-size: 23px;"></i>
+								</span>
+								<div class="dash-count">
+									<h3>{{RDV_total}}</h3>
+								</div>
+							</div>
+							<div class="dash-widget-info">
+								
+								<h6 class="text-muted">RDVs</h6>
+								<div class="progress progress-sm">
+									<div class="progress-bar bg-danger w-50"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-lg-6">
+				
+					<!-- patients Chart -->
+					<div class="card card-chart">
+						<div class="card-header">
+							<h4 class="card-title">Patients</h4>
+						</div>
+						<div class="card-body">
+							<div id="morrisArea"></div>
+						</div>
+					</div>
+					<!-- /patients Chart -->
+					
+				</div>
+				<div class="col-md-12 col-lg-6">
+				
+					<!-- doctors Chart -->
+					<div class="card card-chart">
+						<div class="card-header">
+							<h4 class="card-title">Medecins</h4>
+						</div>
+						<div class="card-body">
+							<div id="morrisArea2"></div>
+						</div>
+					</div>
+					<!-- /doctors	 Chart -->
+					
+				</div>	
+			</div>
+
+			<div class="row">
+                <div class="col-sm-7 col-auto">
+                    <h3 class="page-title">Clear non valid appointments</h3>
+                </div>
+                <div class="col-sm-5 col">
+                    <a href="{%url 'ClearRDV'%}"class="btn btn-success float-right mt-2">Clear</a>
+                </div>
+            </div>
+			<br><br>
+			
+		</div>			
+	</div>
+{%endblock%}
+
+{%block scripts%}
+	<!-- message delete -->
+	<script>
+		setTimeout(function(){
+			document.getElementById('msg').style.opacity = 0;
+		}, 2000)
+		setTimeout(function(){
+			document.getElementById('msg').style.display = "none";
+		}, 2350)
+	</script> 
+	
+	<!-- charts script -->
+	<script>
+		$(function(){
+		
+		/* Morris Area Chart */
+		
+		window.mA = Morris.Area({
+			element: 'morrisArea',
+			data: {{Plist|safe}},
+			xkey: 'year',
+			ykeys: ['patients'],
+			labels: ['patients'],
+			lineColors: ['#1b5a90'],
+			lineWidth: 2,
+			dateFormat: function(x){
+				return x;
+			},
+			fillOpacity: 0.5,
+			gridTextSize: 10,
+			hideHover: 'auto',
+			resize: true,
+			redraw: true
+		});
+
+		/* Morris Area Chart */
+		
+		window.mA = Morris.Area({
+			element: 'morrisArea2',
+			data: {{Dlist|safe}},
+			xkey: 'year',
+			ykeys: ['medecins'],
+			labels: ['medecins'],
+			lineColors: ['#eb5234'],
+			lineWidth: 2,
+			dateFormat: function(x){
+				return x;
+			},
+			fillOpacity: 0.5,
+			gridTextSize: 10,
+			hideHover: 'auto',
+			resize: true,
+			redraw: true
+		});
+		
+		// /* Morris Line Chart */
+		
+		// window.mL = Morris.Line({
+		// 	element: 'morrisLine',9
+		// 	data: {{Glist|safe}},
+		// 	xkey: 'year',
+		// 	ykeys: ['males', 'females'],
+		// 	dateFormat: function(x){
+		// 		return x;
+		// 	},
+		// 	labels: ['Male', 'Female'],
+		// 	lineColors: ['#1b5a90','#ff9d00'],
+		// 	lineWidth: 1,
+		// 	gridTextSize: 10,
+		// 	hideHover: 'auto',
+		// 	resize: true,
+		// 	redraw: true
+		// });
+		// $(window).on("resize", function(){
+		// 	mA.redraw();
+		// 	mL.redraw();
+		// });
+
+		// /* Morris Donut Chart */
+		
+		// window.mL = Morris.Donut({
+		// 	element: 'morrisDonut',
+		// 	data: {{Mlist|safe}},
+		// 	colors: ['#E0F7FA',
+		// 			'#B2EBF2',
+		// 			'#80DEEA',
+		// 			'#4DD0E1',
+		// 			'#26C6DA',
+		// 			'#00BCD4',
+		// 			'#00ACC1',
+		// 			'#0097A7',
+		// 			'#00838F',
+		// 			'#006064'],
+		// 	resize: true,
+		// });
+		// $(window).on("resize", function(){
+		// 	mA.redraw();
+		// 	mL.redraw();
+		// });
+
+	});
+	</script>
+
+{%endblock%}

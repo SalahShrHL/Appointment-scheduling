@@ -1,0 +1,208 @@
+{%extends 'A/base.html'%}
+{%load static%}
+
+{%block sideBar%}
+    <li> 
+        <a href="{%url 'H_admin'%}"><i class="fas fa-home" style="font-size: 20px;"></i> <span>Dashboard</span></a>
+    </li>
+    <li  class="active"> 
+        <a href="{%url 'specialitesAdmin'%}"><i class="fas fa-users" style="font-size: 20px;"></i> <span>Specialities</span></a>
+    </li>
+    <li> 
+        <a href="{%url 'DoctorsAdmin'%}"><i class="fas fa-user-plus" style="font-size: 20px;"></i> <span>Médecins</span></a>
+    </li>
+    <li> 
+        <a href="{%url 'PatientsAdmin'%}"><i class="fas fa-user" style="font-size: 20px;"></i> <span>Patients</span></a>
+    </li>
+    <li> 
+        <a href="{%url 'Logout'%}"><i class="fas fa-sign-out-alt" style="font-size: 20px;"></i> <span>Logout</span></a>
+    </li>
+{%endblock%}
+
+{%block content%}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+    
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-7 col-auto">
+                    <h3 class="page-title">Specialities</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Specialities</li>
+                    </ul>
+                </div>
+                <div class="col-sm-5 col">
+                    <a href="#Add_Specialities_details" data-toggle="modal" class="btn btn-primary float-right mt-2">Ajouter</a>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="datatable table table-hover table-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Specialities</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%for specialite in specialites%}
+                                    <tr>
+                                        <td>
+                                            <h2 class="table-avatar">
+                                                <!-- <a href="#" class="avatar avatar-sm mr-2">
+                                                    <img class="avatar-img" src="assets/img/specialities/specialities-01.png" alt="Speciality">
+                                                </a> -->
+                                                <a href="#">{{specialite.specialite}}</a>
+                                            </h2>
+                                        </td>
+                                    
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a class="btn btn-sm bg-success-light edit_specialite" onclick="setSpecialite(event)" data-toggle="modal" data-id="{{specialite.id}}" data-value="{{specialite.specialite}}" href="#edit_specialities_details">
+                                                    <i class="fe fe-pencil"></i> Modifier
+                                                </a>
+                                                <a  data-toggle="modal" href="#delete_modal" onclick="setIDspecialite(event)" data-id="{{specialite.id}}" class="btn btn-sm bg-danger-light">
+                                                    <i class="fe fe-trash"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>			
+        </div>
+    </div>			
+</div>
+<!-- /Page Wrapper -->
+
+
+<!-- Add Modal -->
+<div class="modal fade" id="Add_Specialities_details" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Specialities</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{%url 'AddSpecialite'%}">
+                    {% csrf_token %}
+                    <div class="row form-row">
+                        <div class="col-12 col-sm-12">
+                            <div class="form-group">
+                                <label>Specialities</label>
+                                <input type="text" class="form-control" name="specialite">
+                            </div>
+                        </div>
+                        <!-- <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="file"  class="form-control">
+                            </div>
+                        </div> -->
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Créer spécialité</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ADD Modal -->
+
+<!-- Edit Details Modal -->
+<div class="modal fade" id="edit_specialities_details" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier Specialities</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{%url 'EditSpecialite'%}">
+                    {% csrf_token %}
+                    <div class="row form-row">
+                        <div class="col-12 col-sm-12">
+                            <div class="form-group">
+                                <label>Specialities</label>
+                                <input id="specialite" type="text" class="form-control" value=""  name="specialite">
+                            </div>
+                            <div class="form-group">
+                                <input id="id_specialite" style="display: none;" type="text" class="form-control" value=""  name="id">
+                            </div>
+                        </div>
+                        <!-- <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="file"  class="form-control">
+                            </div>
+                        </div> -->
+                        
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sauvgarder</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Edit Details Modal -->
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete_modal" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document" >
+        <div class="modal-content">
+        <!--	<div class="modal-header">
+                <h5 class="modal-title">Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>-->
+            <div class="modal-body">
+
+                <form method="POST" action="{%url 'DeltSpecialite'%}">
+                    {% csrf_token %}
+                    <div class="form-content p-2">
+                        <div class="form-group">
+                            <input id="id_specialite_del" style="display: none;" type="text" class="form-control" value=""  name="id">
+                        </div>
+                        <h4 class="modal-title">Delete</h4>
+                        <p class="mb-4">Vous êtes sure que vous voulez supprimer cette spécialité?</p>
+                        <button type="submit" class="btn btn-primary">Supprimer </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Modal -->
+{%endblock%}
+
+{%block scripts%}
+    <script>
+        function setSpecialite(event){
+            document.getElementById("specialite").value = event.target.getAttribute('data-value');
+            document.getElementById("id_specialite").value = event.target.getAttribute('data-id');
+        }
+
+        function setIDspecialite(event){
+            document.getElementById("id_specialite_del").value = event.target.getAttribute('data-id');
+        }
+    </script>
+{%endblock%}

@@ -1,0 +1,379 @@
+{% extends 'base.html'%} 
+{%load static%}
+
+{%block nav1%}
+	<a id="mobile_btn" href="javascript:void(0);">
+		<span class="bar-icon">
+			<span></span>
+			<span></span>
+			<span></span>
+		</span>
+	</a>
+{%endblock%}
+
+{%block nav2%}
+{%if user.is_authenticated and user.is_patient%}
+	<div class="main-menu-wrapper">
+		<div class="menu-header">
+			<a href="#" class="menu-logo">
+				<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+			</a>
+			<a id="menu_close" class="menu-close" href="javascript:void(0);">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+		<ul class="main-nav">
+			<li class="extra">
+				<a href="#">
+					<span class="user-img">
+						<img class="rounded-circle" src="{{i}}" width="31" alt="{{n}} {{p}}">
+					</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="{%url 'H_patient'%}">Acceuil</a>
+			</li>
+			<li><a href="{%url 'FavDoc'%}">Meilleures Cabinets</a></li>
+			<li><a href="{%url 'GetListRV'%}">RDVs</a></li>
+			<li class="extra"><a href="{%url 'profil_patient'%}">Paramètres du profile</a></li>
+			<li class="extra"><a href="#">Notifications</a></li>
+			<li class="extra"><a href="{%url 'Logout'%}">Logout</a></li>
+		</ul>		 
+	</div>				
+{%endif%}
+{%endblock%}
+
+{%block nav3%}
+
+{%if user.is_authenticated and user.is_patient%}
+	<!-- Notifications -->			
+		<li class="nav-item dropdown">
+				<a href="#" class="dropdown-toggle nav-link" onclick="delBadge()" data-toggle="dropdown" style="transition: all 0.3s;">
+					<i class="fas fa-bell" style="font-size: 25px; color: gray;"></i> <span id="badge" class="badge alert-success" style="transition: opacity 0.3s ease;"></span>
+				</a>
+				<div class="dropdown-menu box dropdown-menu-end notifications">
+					<div class="topnav-dropdown-header">
+						<span class="notification-title">Notifications</span>
+						<!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+					</div>
+					<div class="noti-content" style="height: 400px; overflow-y: scroll;">
+						<ul class="notification-list" id="notifs">
+							<li class="notification-message">
+								<a href="#">
+									<div class="media">
+										<p>Pas de notifications pour le moment</p>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!-- <div class="topnav-dropdown-footer">
+						<a href="#">Voir tous les Notifications</a>
+					</div> -->
+				</div>
+		</li>	
+		
+	<!-- /Notifications -->	 
+
+	<!-- User Menu -->				
+		<li class="nav-item dropdown has-arrow logged-item">
+			<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+							<span class="user-img">
+								<img class="rounded-circle" src="{{i}}" width="31" alt="{{n}} {{p}}">
+							</span>
+			</a>						
+			<div class="dropdown-menu dropdown-menu-end">
+							<div class="user-header">
+								<div class="avatar avatar-sm">
+									<img src="{{i}}" alt="User Image" class="avatar-img rounded-circle">
+								</div>
+								<div class="user-text">
+									<h6>{{n}} {{p}}</h6>
+									<p class="text-muted mb-0">Patient</p>
+								</div>
+							</div>
+							<a class="dropdown-item" href="{%url 'profil_patient'%}">Paramètres du profile</a>
+							<a class="dropdown-item" href="{%url 'Logout'%}">Logout</a>
+			</div>						
+		</li>			
+	<!-- /User Menu -->	
+{%else%}
+	<li class="nav-item">
+		<a class="nav-link header-login" href="{%url 'Login'%}">login / Signup </a>
+	</li>
+{%endif%}	
+
+{%endblock%}
+
+{%block Breadcrumb%}
+<!-- Breadcrumb -->	
+	<div class="breadcrumb-bar"> 
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-md-8 col-12">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<ol class="breadcrumb">
+									{%if user.is_authenticated%}
+									<li class="breadcrumb-item"><a href="{%url 'H_patient'%}">Acceuil</a></li>
+									{%else%}
+									<li class="breadcrumb-item"><a href="{%url 'home'%}">Acceuil</a></li>
+									{%endif%}
+									<li class="breadcrumb-item active" aria-current="page">Trouver une cabinet</li>
+								</ol>
+							</nav>
+							<h2 class="breadcrumb-title">{{nbr}} coréspendance(s) trouvé(s)</h2>
+						</div>
+						<!-- <div class="col-md-4 col-12 d-md-block d-none">
+							<div class="sort-by">
+								<span class="sort-title">Sort by</span>
+								<span class="sortby-fliter">
+									<select class="select form-select">
+										<option>Select</option>
+										<option class="sorting">Rating</option>
+									</select>
+								</span>
+							</div>
+						</div> -->
+					</div>
+				</div>
+	</div>		
+<!-- /Breadcrumb -->					
+{%endblock%}
+			
+{%block content%}
+<!-- Page Content -->
+	<div class="content">
+		<div class="container-fluid">
+
+			<div class="row">
+				<div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+				
+					<!-- Search Filter -->
+					<div class="card search-filter">
+						<form action="{%url 'FilterSearch'%}" method="GET">
+							<div class="card-header">
+								<h4 class="card-title mb-0">Filter de recherche</h4>
+							</div>
+							<div class="card-body">
+							<div class="filter-widget">
+								<h4>Genre</h4>
+								<div>
+									<label class="custom_check">
+										<input type="checkbox" name="male">
+										<span class="checkmark"></span> Male
+									</label>
+								</div>
+								<div>
+									<label class="custom_check">
+										<input type="checkbox" name="female">
+										<span class="checkmark"></span> Female
+									</label>
+								</div>
+								<div style="display: none;">
+									<input type="text" name="wilaya" value="{{wilaya}}">
+									<input type="text" name="specialite" value="{{specialite}}">
+									<input type="text" name="nomCabinet" value="{{search_name}}">
+								</div>
+							</div>
+								<div class="btn-search">
+									<button type="submit" class="btn btn-block">Chercher</button>
+								</div>	
+							</div>
+						</form>
+					</div>
+					<!-- /Search Filter -->
+					
+				</div>
+				
+				<div class="col-md-12 col-lg-8 col-xl-9">
+
+					<!-- Doctor Widget -->
+					{%if c.exists%}
+						{%for cabinet in c%}
+							<div class="card">
+								<div class="card-body">
+									<div class="doctor-widget">
+										<div class="doc-info-left">
+											<div class="doctor-img">
+												<a href="doctor-profile.html">
+													<img src="{{cabinet.img_medecin.url}}" class="img-fluid" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';">
+												</a>
+											</div>
+											<div class="doc-info-cont">
+												<h4 class="doc-name"><a href="doctor-profile.html">{{cabinet.NomCabinet}}</a></h4>
+												<p class="doc-speciality">{{cabinet.specialite.specialite}}</p>
+												<!-- <h5 class="doc-department"><img src="{%static 'assets/img/specialities/specialities-05.png'%}" class="img-fluid" alt="Speciality">Dentist</h5> -->
+												<div class="rating" data-rating = "{{cabinet.rating}}">
+													<i class="fas fa-star"></i>
+													<i class="fas fa-star"></i>
+													<i class="fas fa-star"></i>
+													<i class="fas fa-star"></i>
+													<i class="fas fa-star"></i>
+													<!-- <span class="d-inline-block average-rating">(17)</span> -->
+												</div>
+												<div class="clinic-details">
+													<p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{cabinet.addresse}}, {{cabinet.commune}}, {{cabinet.wilaya}}</p>
+													<!-- class="clinic-gallery" -->
+													<ul>
+														<li>
+															<a href="{{cabinet.img1.url}}" data-fancybox="gallery">
+																<img src="{{cabinet.img1.url}}" alt="Feature">
+															</a>
+														</li>
+														<li>
+															<a href="{{cabinet.img2.url}}" data-fancybox="gallery">
+																<img  src="{{cabinet.img2.url}}" alt="Feature">
+															</a>
+														</li>
+														<li>
+															<a href="{{cabinet.img3.url}}" data-fancybox="gallery">
+																<img src="{{cabinet.img3.url}}" alt="Feature">
+															</a>
+														</li>
+													</ul>
+												</div>
+												<!-- <div class="clinic-services">
+													<span>Dental Fillings</span>
+													<span> Whitneing</span>
+												</div> -->
+											</div>
+										</div>
+										<div class="doc-info-right">
+											<div class="clinic-booking">
+												<a class="view-pro-btn" href="{%url 'ProfilD' cabinet.id %}">Consulter le Profile</a>
+												<a class="apt-btn" href="{%url 'GetListRV' cabinet.id%}">Prendre un RDV</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{%endfor%}
+					{%else%}
+					<p>accune résultat</p>
+					{%endif%}
+					
+					<!-- /Doctor Widget -->
+				</div>
+			</div>
+
+		</div>
+	</div>				
+<!-- /Page Content -->
+{%endblock%}
+	  
+{%block scripts%}
+<!-- notifications script -->
+	<script>
+			var img_url="";
+			function delBadge(){
+				var badge = document.getElementById('badge');
+				badge.style.opacity = 0;
+				setTimeout(function(){
+					badge.style.display = 'none';
+				}, 350)
+			}
+			function dayOfWeek(date){
+				week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+				return week[date];
+			}
+			function run(notitification, element, date) {
+		  
+				// Creating Our XMLHttpRequest object 
+				var xhr = new XMLHttpRequest();
+		
+				// Making our connection  
+				var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+				xhr.open("GET", url, true);
+		
+				// function execute after request is successful 
+				xhr.onreadystatechange = function () {
+					if (this.readyState == 4 && this.status == 200) {
+						parser = new DOMParser();
+						a = parser.parseFromString(this.responseText,"text/xml");
+						img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+						img_url = "http://127.0.0.1:8000/media/" + img_url;
+						element.innerHTML +='<li class="notification-message nothing">'
+											+	'<a href="#">'
+											+		'<div class="media">'
+											+			'<span class="avatar avatar-sm" style="min-width:40px;">'
+											+				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+											+			'</span>'
+											+			'<div class="media-body">'
+											+				'<p class="noti-details">'+notitification.fields.content+'</p>'
+											+				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+											+			'</div>'
+											+		'</div>'
+											+	'</a>'
+											+'</li>';
+					}
+				}
+				// Sending our request 
+				xhr.send();
+			}
+			function prep_notif(){
+				if( !{{empty}}){
+					var element = document.getElementById('notifs');
+					var badge = document.getElementById('badge');
+					var notifs = JSON.parse('{{notif|safe}}');
+					var nbr_news=0;
+					for(let i=0; i<notifs.length; i++){
+						if(notifs[i].fields.new == true) nbr_news++;
+					}
+					if(nbr_news == 0){
+						delBadge()
+					}
+					else{
+						badge.innerHTML = nbr_news;
+					}
+					var max = 4;
+					if(nbr_news > 4) max = nbr_news;
+					element.innerHTML = "";
+					for(let i=0; i<notifs.length; i++){
+						var temp = Date.parse(notifs[i].fields.Date);
+						var date = new Date(temp);
+						run(notifs[i], element, date);
+					}
+				}
+			}
+			
+	</script>	
+
+<!-- side nav bar script -->
+	<script>
+		var extras = document.getElementsByClassName('extra');
+		var w = window.innerWidth;
+		for(let i=0;i<extras.length;i++){
+			if(w <= 575){
+			extras[i].style.display = "list-item";
+			}
+			else{
+				extras[i].style.display = "none";
+			}
+		}
+		function addElementNav(){
+			var w = window.innerWidth;
+				var extras = document.getElementsByClassName('extra');
+				for(let i=0;i<extras.length;i++){
+					if(w <= 575){
+					extras[i].style.display = "list-item";
+					}
+					else{
+						extras[i].style.display = "none";
+					}
+				}
+		}
+	</script>
+
+<!-------------------------------------rating script--------------------------------------------->
+	<script>
+		E = document.getElementsByClassName('rating');
+		for(let i=0;i<E.length;i++){
+			stars = E[i].children;
+			v = E[i].getAttribute('data-rating');
+			for(let j=0;j<v;j++){
+				stars[j].className += " filled";
+			}
+		}
+
+	</script>
+{%endblock%}

@@ -1,0 +1,301 @@
+{%load static%}
+<!DOCTYPE html> 
+<html lang="en">
+	
+<head>
+		<meta charset="utf-8">
+		<title>Doccure</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="{%static 'assets/css/bootstrap.css'%}">
+		<link rel="stylesheet" href="{%static 'assets/plugins/dropzone/dropzone.min.css'%}">
+		<!-- Favicons -->
+		<link type="image/x-icon" rel="icon" href="{% static 'assets/img/favicon.png' %}">
+		
+		<!-- Fontawesome CSS -->
+		<link rel="stylesheet" href="{%static 'assets/plugins/fontawesome/css/fontawesome.min.css'%}">
+		<link rel="stylesheet" href="{%static 'assets/plugins/fontawesome/css/all.min.css'%}">
+
+		<!-- ClockPicker Stylesheet -->
+		<link rel="stylesheet" type="text/css" href="{%static 'dist/bootstrap-clockpicker.min.css'%}">
+		
+		<!-- Datetimepicker CSS -->
+		<link rel="stylesheet" href="{%static 'assets/css/bootstrap-datetimepicker.min.css'%}">
+
+		<!-- Full Calander CSS -->
+        <link rel="stylesheet" href="{%static 'assets/plugins/fullcalendar/fullcalendar.min.css'%}">
+		
+		<!-- Select2 CSS -->
+		<link rel="stylesheet" href="{%static 'assets/plugins/select2/css/select2.min.css'%}">
+		
+		<!-- Fancybox CSS -->
+		<link rel="stylesheet" href="{%static 'assets/plugins/fancybox/jquery.fancybox.min.css'%}">
+
+		<!-- Feathericon CSS -->
+        <link rel="stylesheet" href="{%static 'assets/css/feathericon.min.cs'%}s">
+		<link rel="stylesheet" href="{%static 'assets/plugins/morris/morris.css'%}">
+
+		<!-- chart js -->
+		<script src="{% static 'js/chartjs/dist/chart.js' %}"></script>
+		
+		<!-- Main CSS -->
+		<link rel="stylesheet" href="{%static 'assets/css/style.css'%}">
+		
+		
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="assets/js/html5shiv.min.js"></script>
+			<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	
+	</head>
+	<body onload="prep_notif()" onresize="addElementNav()">
+
+		<!-- Main Wrapper -->
+		<div class="main-wrapper">
+		
+			<!-- Header -->
+			<header class="header">
+				<nav class="navbar navbar-expand-lg header-nav">
+					<div class="navbar-header">
+						{% block nav1%}{%endblock%}
+
+						{%if user.is_authenticated and user.is_doctor%}
+						<a href="{%url 'H_doctor'%}" class="navbar-brand logo">
+							<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+						</a>
+						{%endif%}
+
+						{%if user.is_authenticated and user.is_patient%}
+						<a href="{%url 'H_patient'%}" class="navbar-brand logo">
+							<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+						</a>
+						{%endif%}
+
+						{%if not user.is_authenticated%}
+						<a href="{%url 'home'%}" class="navbar-brand logo">
+							<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+						</a>
+						{%endif%}
+
+					</div>
+					{%block nav2%}{%endblock%}
+					<ul class="nav header-navbar-rht">
+						<li class="nav-item contact-item">
+							<div class="header-contact-img">
+								<i class="fas fa-phone-alt"></i>							
+							</div>
+							<div class="header-contact-detail">
+								<p class="contact-header">Contact</p>
+								<p class="contact-info-header"> +213 0675484833</p>
+							</div>
+						</li>
+						<!-- <li class="nav-item">
+							{%block nav_item%}{%endblock%}
+						</li> -->
+						{%block nav3%}{%endblock%}
+					</ul>
+					
+				</nav>
+			</header>
+			<!-- /Header -->
+			
+			<!-- Breadcrumb -->
+			{%block Breadcrumb%}{%endblock%}
+			<!-- /Breadcrumb -->
+			
+			<!-- Page Content -->
+			{%block content%}{%endblock%}
+		
+			<!-- /Page Content -->
+   
+			<!-- Footer -->
+			<footer class="footer">
+				
+				<!-- Footer Top -->
+				<div class="footer-top">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-lg-3 col-md-6">
+							
+								<!-- Footer Widget -->
+								<div class="footer-widget footer-about">
+									<div class="footer-logo">
+										<img src="{%static 'assets/img/footer-logo.png'%}" alt="logo">
+									</div>
+									<div class="footer-about-content">
+										<p>DOCCURE est le site web qui facilite la prise des rendez_vous dans les cabinets médical en algérie.</p>
+										<!-- <div class="social-icon">
+											<ul>
+												<li>
+													<a href="#"><i class="fab fa-facebook-f"></i> </a>
+												</li>
+												<li>
+													<a href="#"><i class="fab fa-twitter"></i> </a>
+												</li>
+												<li>
+													<a href="#"><i class="fab fa-linkedin-in"></i></a>
+												</li>
+												<li>
+													<a href="#"><i class="fab fa-instagram"></i></a>
+												</li>
+												<li>
+													<a href="#"><i class="fab fa-dribbble"></i> </a>
+												</li>
+											</ul>
+										</div> -->
+									</div>
+								</div>
+								<!-- /Footer Widget -->
+								
+							</div>
+							{%if user.is_authenticated%}
+								{%if user.is_doctor%}
+								<!-- doctor Quick menu -->
+								<div class="col-lg-3 col-md-6">
+								
+									<!-- Footer Widget -->
+									<div class="footer-widget footer-menu">
+										<h2 class="footer-title">Menu Rapide</h2>
+										<ul>
+											<li><a href="{%url 'H_doctor'%}"><i class="fas fa-angle-double-right"></i> Acceuil</a></li>
+											<li><a href="{%url 'GetPatientList'%}"><i class="fas fa-angle-double-right"></i> Patients</a></li>
+											<li><a href="{%url 'GetListRV'%}"><i class="fas fa-angle-double-right"></i> RDVs</a></li>
+											<li><a href="{%url 'GetTimingSchedual'%}"><i class="fas fa-angle-double-right"></i> Horaires</a></li>
+											<li><a href="{%url 'Dashboard'%}"><i class="fas fa-angle-double-right"></i> Dashboard</a></li>
+											<li><a href="{%url 'profile_doctor'%}"><i class="fas fa-angle-double-right"></i> paramètres du profile</a></li>
+										</ul>
+									</div>
+									<!-- /Footer Widget -->
+									
+								</div>
+								{%endif%}
+
+								{%if user.is_patient%}
+								<!-- patient Quick menu -->
+								<div class="col-lg-3 col-md-6">
+								
+									<!-- Footer Widget -->
+									<div class="footer-widget footer-menu">
+										<h2 class="footer-title">Menu Rapide</h2>
+										<ul>
+											<li><a href="{%url 'H_patient'%}"><i class="fas fa-angle-double-right"></i> Acceuil</a></li>
+											<li><a href="{%url 'GetListRV'%}"><i class="fas fa-angle-double-right"></i> RDVs</a></li>
+											<li><a href="{%url 'FavDoc'%}"><i class="fas fa-angle-double-right"></i> Cabinets favorés</a></li>
+											<li><a href="{%url 'profil_patient'%}"><i class="fas fa-angle-double-right"></i> paramètres du profile</a></li>
+										</ul>
+									</div>
+									<!-- /Footer Widget -->
+									
+								</div>
+								{%endif%}
+							{%endif%}
+							
+							<div class="col-lg-3 col-md-6">
+							
+								<!-- Footer Widget -->
+								<div class="footer-widget footer-contact">
+									<h2 class="footer-title">Nous Contacter</h2>
+									<div class="footer-contact-info">
+										<div class="footer-address">
+											<span><i class="fas fa-map-marker-alt"></i></span>
+											<p> الإقامة الجامعية عبد القادر بالعربي<br> Alger, sorecal </p>
+										</div>
+										<p>
+											<i class="fas fa-phone-alt"></i>
+											+213 0675484833
+										</p>
+										<p class="mb-0">
+											<i class="fas fa-envelope"></i>
+											PFE2022@gmail.com
+										</p>
+									</div>
+								</div>
+								<!-- /Footer Widget -->
+								
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<!-- /Footer Top -->
+				
+				<!-- Footer Bottom -->
+                <div class="footer-bottom">
+					<div class="container-fluid">
+					
+						<!-- Copyright -->
+						<div class="copyright">
+							<div class="row">
+								<div class="col-md-6 col-lg-6">
+									<div class="copyright-text">
+										<p class="mb-0"><a href="#">group 67</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Copyright -->
+						
+					</div>
+				</div>
+				<!-- /Footer Bottom -->
+				
+			</footer>
+			<!-- /Footer -->
+		   
+		</div>
+		<!-- /Main Wrapper -->
+		
+		{%block PlugIn%}{%endblock%}
+				
+		<!-- jQuery -->
+		<script src="{%static 'assets/js/jquery.min.js'%}"></script>
+
+		<!-- Bootstrap Core JS -->
+		<script src="{%static 'assets/js/popper.min.js'%}"></script>
+		<script src="{%static 'assets/js/bootstrap.min.js'%}"></script>
+		<!-- <script src="{%static 'assets/js/bootstrap.bundle.js'%}"></script>  -->
+		
+		<!-- Datetimepicker JS -->
+		<script src="{%static 'assets/js/moment.min.js'%}"></script>
+		<script src="{%static 'assets/js/bootstrap-datetimepicker.min.js'%}"></script>
+
+		{%block scripts%}{%endblock%}
+
+		<!-- Sticky Sidebar JS -->
+        <script src="{%static 'assets/plugins/theia-sticky-sidebar/ResizeSensor.js'%}"></script>
+        <script src="{%static 'assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js'%}"></script>
+
+		<!-- Select2 JS -->
+		<script src="{%static 'assets/plugins/select2/js/select2.min.js'%}"></script>
+
+		<!-- Dropzone JS -->
+		<script src="{%static 'assets/plugins/dropzone/dropzone.min.js'%}"></script>
+		
+		<!-- Bootstrap Tagsinput JS -->
+		<script src="{%static 'assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js'%}"></script>
+		
+		<!-- Profile Settings JS -->
+		<script src="{%static 'assets/js/profile-settings.js'%}"></script>
+
+		<!-- Custom JS -->
+		<script src="{%static 'assets/js/script.js'%}"></script>
+
+		<!-- Slimscroll JS -->
+        <script src="{%static 'assets/plugins/slimscroll/jquery.slimscroll.min.js'%}"></script>
+
+		<!-- Fancybox JS -->
+		<script src="{%static 'assets/plugins/fancybox/jquery.fancybox.min.js'%}"></script>	    
+		
+		<!-- message delete -->
+		<script>
+			setTimeout(function(){
+				document.getElementById('msg').style.opacity = 0;
+			}, 2000)
+			setTimeout(function(){
+				document.getElementById('msg').style.display = "none";
+			}, 2350)
+		</script> 
+	</body>
+
+</html>

@@ -1,0 +1,487 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block nav1%}
+	<a id="mobile_btn" href="javascript:void(0);">
+		<span class="bar-icon">
+			<span></span>
+			<span></span>
+			<span></span>
+		</span>
+	</a>
+{%endblock%}
+
+{%block nav2%}
+<div class="main-menu-wrapper">
+    <div class="menu-header">
+        <a href="#" class="menu-logo">
+            <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+        </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+            <i class="fas fa-times"></i>
+        </a>
+    </div>
+    <ul class="main-nav">
+        <li class="extra">
+            <a href="#">
+                <span class="user-img">
+                    <img class="rounded-circle" src="{{u.img_medecin.url}}" width="31" alt="{{u.NomCabinet}} {{p}">
+                </span>
+            </a>
+        </li>
+        <li class="active"><a href="{%url 'H_doctor'%}">Acceuil</a></li>
+        <li><a href="{%url 'GetPatientList'%}">Patients</a></li>
+        <li><a href="{%url 'D_RV_LIST'%}">RDVs</a></li>
+        <li><a href="{%url 'GetTimingSchedual'%}">Horaire</a></li>
+        <li><a href="{%url 'GetAvis'%}">Avis</a></li>
+        <li class="extra"><a href="#">Notifications</a></li>
+		<li class="extra"><a href="{%url 'Logout'%}">Logout</a></li>
+    </ul>		 
+</div>
+{%endblock%}
+
+{%block nav3%}
+<!-- User Menu -->
+	{%include 'includes/header_doctor.html'%}
+<!-- /User Menu -->
+{%endblock%}
+
+{%block content%}
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="widget-profile pro-widget-content">
+                        <div class="profile-info-widget">
+                            <a href="#" class="booking-doc-img">
+                                <img src="{{u.img_medecin.url}}" alt="User Image">
+                            </a>
+                            <div class="profile-det-info">
+                                <h3>{{u.NomCabinet}}</h3>
+                                
+                                <div class="patient-details">
+                                    <h5 class="mb-0">{{u.addresse}}, {{u.commune}}, {{u.wilaya}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-widget">
+                        <nav class="dashboard-menu">
+                            <ul>
+                                <li class="active">
+                                    <a href="{%url 'Dashboard'%}">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'D_RV_LIST'%}">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>RDVs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetPatientList'%}">
+                                        <i class="fas fa-user-injured"></i>
+                                        <span>Patients</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetTimingSchedual'%}">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        <span>Horaire</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetAvis'%}">
+                                        <i class="fas fa-star"></i>
+                                        <span>Avis</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'profile_doctor'%}">
+                                        <i class="fas fa-user-cog"></i>
+                                        <span>Paramètres du profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'Logout'%}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /Profile Sidebar -->
+                
+            </div>
+            
+            <div class="col-md-7 col-lg-8 col-xl-9">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card dash-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-4">
+                                        <div class="dash-widget dct-border-rht">
+                                            <div class="circle-bar circle-bar1">
+                                                <div class="circle-graph1" id="percent" data-percent="">
+                                                    <img src="{%static 'assets/img/icon-01.png'%}" class="img-fluid" alt="patient">
+                                                </div>
+                                            </div>
+                                            <div class="dash-widget-info">
+                                                <h6>nombre des Patient Total</h6>
+                                                <h3>{{total_patient}}</h3>
+                                                <p class="text-muted">Till Today</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-12 col-lg-4">
+                                        <div class="dash-widget dct-border-rht">
+                                            <div class="circle-bar circle-bar2">
+                                                <div class="circle-graph2" data-percent="{{today_patient}}">
+                                                    <img src="{%static 'assets/img/icon-02.png'%}" class="img-fluid" alt="Patient">
+                                                </div>
+                                            </div>
+                                            <div class="dash-widget-info">
+                                                <h6>les Patients d'aujourd'hui</h6>
+                                                <h3>{{today_patient}}</h3>
+                                                <p class="text-muted">{{today_date}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-4">
+                                        <div class="dash-widget">
+                                            <div class="circle-bar circle-bar2">
+                                                <div class="circle-graph2" id="percent2" data-percent="">
+                                                    <img src="{%static 'assets/img/icon-03.png'%}" class="img-fluid" alt="Patient">
+                                                </div>
+                                            </div>
+                                            <div class="dash-widget-info">
+                                                <h6>nombre total des RDVs</h6>
+                                                <h3>{{total_RDV}}</h3>
+                                                <p class="text-muted">Till Today</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12 col-lg-6">
+                    
+                        <!-- Patients Chart -->
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h4 class="card-title">Patients</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="morrisArea"></div>
+                            </div>
+                        </div>
+                        <!-- /Patients Chart -->
+                        
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                    
+                        <!-- gender Chart -->
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h4 class="card-title">Genre</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="morrisLine"></div>
+                            </div>
+                        </div>
+                        <!-- /gender Chart -->
+                        
+                    </div>	
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-lg-6">
+                    
+                        <!-- motif Chart -->
+                        <div class="card card-chart">
+                            <div class="card-header">
+                                <h4 class="card-title">Motif</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="morrisDonut"></div>
+                            </div>
+                        </div>
+                        <!-- /motif Chart -->
+                        
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                    
+                        <div class="card card-table mb-0">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient</th>
+                                                <th>Date</th>
+                                                <th>Heure</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {%for item in list%}
+                                            <tr>
+                                                <td>
+                                                    <h2 class="table-avatar">
+                                                        <a href="#" class="avatar avatar-sm mr-2">
+                                                            <img class="avatar-img rounded-circle" src="{{item.patient.img_patient.url}}" alt="User Image">
+                                                        </a>
+                                                        <a href="#">&nbsp;&nbsp;{{item.patient.nomPatient}} {{item.patient.prenomPatient}}</a>
+                                                    </h2>
+                                                </td>
+                                                <td>{{item.french_Date}}</td>
+                                                <td>{{item.french_time}}</td>
+                                                {%if item.status == 'completé'%}
+                                                    <td><span class="badge badge-pill bg-success-light">completé</span></td>
+                                                {%endif%}
+                                                {%if item.status == 'annulé'%}
+                                                    <td><span class="badge badge-pill bg-danger-light">annulé</span></td>
+                                                {%endif%}
+                                                {%if item.status == 'confirmé'%}
+                                                    <td><span class="badge badge-pill bg-primary-light">confirmé</span></td>
+                                                {%endif%}
+                                                {%if item.status == 'confirmé'%}
+                                                <td class="text-right">
+                                                    <div class="table-action">
+                                                        <a href="#" data-value="{{item.status}}" class="btn btn-sm bg-primary-light RDV">
+                                                            <i class="fas fa-print"></i> Imprimer
+                                                        </a>
+                                                        <a href="#annuler_RDV" onclick="annulerRDV(event)" data-id = "{{item.id}}" data-toggle="modal" data-value="{{item.status}}" class="btn btn-sm bg-danger-light RDV">
+                                                            <i class="fas fa-trash"></i> Annuler
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                {%endif%}
+                                            </tr>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- notifications -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender; 
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm"  style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!-- side nav bar script -->
+<script>
+    var extras = document.getElementsByClassName('extra');
+    var w = window.innerWidth;
+    for(let i=0;i<extras.length;i++){
+        if(w <= 575){
+        extras[i].style.display = "list-item";
+        }
+        else{
+            extras[i].style.display = "none";
+        }
+    }
+    function addElementNav(){
+        var w = window.innerWidth;
+            var extras = document.getElementsByClassName('extra');
+            for(let i=0;i<extras.length;i++){
+                if(w <= 575){
+                extras[i].style.display = "list-item";
+                }
+                else{
+                    extras[i].style.display = "none";
+                }
+            }
+    }
+</script>
+
+<!-- Circle Progress JS -->
+<script src="{%static 'assets/js/circle-progress.min.js'%}"></script>
+
+<!-- Slimscroll JS -->
+<script src="{%static 'assets/plugins/slimscroll/jquery.slimscroll.min.js'%}"></script>
+		
+<script src="{%static 'assets/plugins/raphael/raphael.min.js'%}"></script>    
+<script src="{%static 'assets/plugins/morris/morris.min.js'%}"></script>  
+
+<!-- charts script -->
+<script>
+    $(function(){
+	
+	/* Morris Area Chart */
+	
+	window.mA = Morris.Area({
+	    element: 'morrisArea',
+	    data: {{Plist|safe}},
+	    xkey: 'year',
+	    ykeys: ['patients'],
+	    labels: ['patients'],
+	    lineColors: ['#1b5a90'],
+	    lineWidth: 2,
+		dateFormat: function(x){
+            return x;
+        },
+     	fillOpacity: 0.5,
+	    gridTextSize: 10,
+	    hideHover: 'auto',
+	    resize: true,
+		redraw: true
+	});
+	
+	/* Morris Line Chart */
+	
+	window.mL = Morris.Line({
+	    element: 'morrisLine',
+	    data: {{Glist|safe}},
+	    xkey: 'year',
+	    ykeys: ['males', 'females'],
+        dateFormat: function(x){
+            return x;
+        },
+	    labels: ['Male', 'Female'],
+	    lineColors: ['#1b5a90','#ff9d00'],
+	    lineWidth: 1,
+	    gridTextSize: 10,
+	    hideHover: 'auto',
+	    resize: true,
+		redraw: true
+	});
+	$(window).on("resize", function(){
+		mA.redraw();
+		mL.redraw();
+	});
+
+    /* Morris Donut Chart */
+	
+	window.mL = Morris.Donut({
+	    element: 'morrisDonut',
+        data: {{Mlist|safe}},
+	    colors: ['#E0F7FA',
+                '#B2EBF2',
+                '#80DEEA',
+                '#4DD0E1',
+                '#26C6DA',
+                '#00BCD4',
+                '#00ACC1',
+                '#0097A7',
+                '#00838F',
+                '#006064'],
+	    resize: true,
+	});
+	$(window).on("resize", function(){
+		mA.redraw();
+		mL.redraw();
+	});
+
+});
+</script>
+<!-- percentage script -->
+<script>
+    document.getElementById('percent').setAttribute('data-percent', {{total_patient}}/1);
+    document.getElementById('percent2').setAttribute('data-percent', {{total_RV}}/1);
+</script>
+{%endblock%}

@@ -1,0 +1,353 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block nav1%}
+		<a id="mobile_btn" href="javascript:void(0);">
+			<span class="bar-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</a>
+{%endblock%}
+
+{%block nav2%}
+	<div class="main-menu-wrapper">
+		<div class="menu-header">
+			<a href="#" class="menu-logo">
+				<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+			</a>
+			<a id="menu_close" class="menu-close" href="javascript:void(0);">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+		<ul class="main-nav">
+            <li class="extra">
+				<a href="#">
+					<span class="user-img">
+						<img class="rounded-circle" src="{{u.img_patient.url}}" width="31" alt="{{u.nomPatient}} {{u.prenomPatient}}">
+					</span>
+				</a>
+			</li>
+			<li>
+				<a href="{%url 'H_patient'%}">Acceuil</a>
+			</li>
+			<li><a href="{%url 'FavDoc'%}">Meilleure Cabinets</a></li>
+			<li class="active"><a href="{%url 'GetListRV'%}">RDVs</a></li>
+            <li class="extra"><a href="#">Notifications</a></li>
+			<li class="extra"><a href="{%url 'Logout'%}">Log out</a></li>
+		</ul>		 
+	</div>
+{%endblock%}
+
+{%block nav3%}
+<!-- Notifications -->
+<li class="nav-item dropdown">
+    <a href="#" class="dropdown-toggle nav-link" onclick="delBadge()" data-toggle="dropdown" style="transition: all 0.3s;">
+        <i class="fas fa-bell" style="font-size: 25px; color: gray;"></i> <span id="badge" class="badge alert-success" style="transition: opacity 0.3s ease;"></span>
+    </a>
+    <div class="dropdown-menu box dropdown-menu-end notifications">
+        <div class="topnav-dropdown-header">
+            <span class="notification-title">Notifications</span>
+            <!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+        </div>
+        <div class="noti-content" style="height: 400px; overflow-y: scroll;">
+            <ul class="notification-list" id="notifs">
+                <li class="notification-message">
+                    <a href="#">
+                        <div class="media">
+                            <p>nothing for the moment</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- <div class="topnav-dropdown-footer">
+            <a href="#">Voir tous les Notifications</a>
+        </div> -->
+    </div>
+</li>
+<!-- /Notifications -->
+	<!-- User Menu -->
+	<li class="nav-item dropdown has-arrow logged-item">
+		<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+			<span class="user-img">
+				<img class="rounded-circle" src="{{u.img_patient.url}}" width="31" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';">
+			</span>
+		</a>
+		<div class="dropdown-menu dropdown-menu-end">
+			<div class="user-header">
+				<div class="avatar avatar-sm">
+					<img src="{{u.img_patient.url}}" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';" class="avatar-img rounded-circle">
+				</div>
+				<div class="user-text">
+					<h6>{{u.nomPatient}} {{u.prenomPatient}}</h6>
+					<p class="text-muted mb-0">Patient</p>
+				</div>
+			</div>
+			<a class="dropdown-item" href="patient-dashboard.html">Dashboard</a>
+			<a class="dropdown-item" href="{%url 'profil_patient'%}">Profile Settings</a>
+			<a class="dropdown-item" href="{%url 'Logout'%}">Logout</a>
+		</div>
+	</li>
+	<!-- /User Menu -->
+{%endblock%}
+
+{%block Breadcrumb%}
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Profile Settings</li>
+                        </ol>
+                    </nav>
+                    <h2 class="breadcrumb-title">liste des Rendez-vous</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{%block content%}
+{%include 'messages.html'%}
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="row d-flex justify-content-center">
+            
+            <div class="col-md-7 col-lg-8 col-xl-9">
+                <div class="card">
+                    <div class="card-body pt-0">
+                    
+                        <!-- Tab Menu -->
+                        <nav class="user-tabs mb-4">
+                            <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#pat_appointments" data-toggle="tab">Rendez-vous</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- /Tab Menu -->
+                        
+                        <!-- Tab Content -->
+                        <div class="tab-content pt-0">
+                            
+                            <!-- Appointment Tab -->
+                            <div id="pat_appointments" class="tab-pane fade show active">
+                                <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Medecin</th>
+                                                        <th>Date</th>
+                                                        <th>Heure</th>
+                                                        <th>Status</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {%for item in list%}
+                                                    <tr>
+                                                        <td>
+                                                            <h2 class="table-avatar">
+                                                                <a href="#" class="avatar avatar-sm mr-2">
+                                                                    <img class="avatar-img rounded-circle" src="{{item.medecin.img_medecin.url}}" alt="User Image">
+                                                                </a>
+                                                                <a href="#">&nbsp;&nbsp;{{item.medecin.NomCabinet}} <span>&nbsp;&nbsp;{{item.medecin.specialite}}</span></a>
+                                                            </h2>
+                                                        </td>
+                                                        <td>{{item.day_name}}.&nbsp;&nbsp;{{item.french_Date}}</td>
+                                                        <td>{{item.french_time}}</td>
+                                                        {%if item.status == 'completé'%}
+                                                            <td><span class="badge badge-pill bg-success-light">completé</span></td>
+                                                        {%endif%}
+                                                        {%if item.status == 'annulé'%}
+                                                            <td><span class="badge badge-pill bg-danger-light">annulé</span></td>
+                                                        {%endif%}
+                                                        {%if item.status == 'confirmé'%}
+                                                            <td><span class="badge badge-pill bg-primary-light">confirmé</span></td>
+                                                        {%endif%}
+                                                        <td class="text-right">
+                                                            <div class="table-action">
+                                                                <a href="#" data-value="{{item.status}}" class="btn btn-sm bg-primary-light RDV">
+                                                                    <i class="fas fa-print"></i> Imprimer
+                                                                </a>
+                                                                <a href="#annuler_RDV" onclick="annulerRDV(event)" data-id = "{{item.id}}" data-toggle="modal" data-value="{{item.status}}" class="btn btn-sm bg-danger-light RDV">
+                                                                    <i class="fas fa-trash"></i> Annuler
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Appointment Tab -->
+                        </div>
+                        <!-- Tab Content -->
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{%endblock%}
+
+{%block PlugIn%}
+<div class="modal fade custom-modal" id="annuler_RDV">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Annuler le Rendez_vous</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-summary">
+                    <p style="font-size: 16px;">voulez vous vraiment annuler çe rendez_vous?</p>
+                </div>
+                <form method="POST" action="{%url 'DeleteRV'%}">
+                    <!-- <input autocomplete="false" name="hidden" type="text" style="display:none;"> -->
+                    {% csrf_token %}
+                    <input type="text" id="id_RDV" style="display: none;" name="ID_RDV">
+                    <div class="booking-item-wrap">
+                        <div class="submit-section text-center">
+                            <button type="submit" class="btn btn-danger submit-btn">Annuler RDV</button>
+                            <button type="button" class="btn btn-primary submit-btn" data-dismiss="modal" aria-label="Close">Non</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- RDV -->
+<script>
+    buttons = document.getElementsByClassName('RDV');
+    for(let i=0;i<buttons.length;i++){
+        if(buttons[i].getAttribute('data-value')=="completé" || buttons[i].getAttribute('data-value')=="annulé"){
+            buttons[i].style.display = 'none';
+        }
+    }
+    function annulerRDV(event){
+        document.getElementById('id_RDV').value = event.target.getAttribute('data-id');
+    }
+</script>
+
+<!-- notifications -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm" style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!-- side nav bar script -->
+<script>
+    var extras = document.getElementsByClassName('extra');
+    var w = window.innerWidth;
+    for(let i=0;i<extras.length;i++){
+        if(w <= 575){
+        extras[i].style.display = "list-item";
+        }
+        else{
+            extras[i].style.display = "none";
+        }
+    }
+    function addElementNav(){
+        var w = window.innerWidth;
+            var extras = document.getElementsByClassName('extra');
+            for(let i=0;i<extras.length;i++){
+                if(w <= 575){
+                extras[i].style.display = "list-item";
+                }
+                else{
+                    extras[i].style.display = "none";
+                }
+            }
+    }
+</script>
+{%endblock%}

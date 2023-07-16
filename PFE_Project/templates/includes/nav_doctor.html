@@ -1,0 +1,27 @@
+{%load static%}
+<div class="main-menu-wrapper">
+    <div class="menu-header">
+        <a href="#" class="menu-logo">
+            <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+        </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+            <i class="fas fa-times"></i>
+        </a>
+    </div>
+    <ul class="main-nav">
+        <li class="extra">
+            <a href="#">
+                <span class="user-img">
+                    <img class="rounded-circle" src="{{u.img_medecin.url}}" width="31" alt="{{u.NomCabinet}}">
+                </span>
+            </a>
+        </li>
+        <li class="active"><a href="{%url 'H_doctor'%}">Accueil</a></li>
+        <li><a href="{%url 'GetPatientList'%}">Patients</a></li>
+        <li><a href="{%url 'D_RV_LIST'%}">RDVs</a></li>
+        <li><a href="{%url 'GetTimingSchedual'%}">Horaire</a></li>
+        <li><a href="{%url 'GetAvis'%}">Avis</a></li>
+        <li class="extra"><a href="#">Notifications</a></li>
+		<li class="extra"><a href="{%url 'Logout'%}">Logout</a></li>
+    </ul>		 
+</div>

@@ -1,0 +1,48 @@
+<!-- notifications -->
+<li class="nav-item dropdown">
+    <a href="#" class="dropdown-toggle nav-link" onclick="delBadge()" data-toggle="dropdown" style="transition: all 0.3s;">
+        <i class="fas fa-bell" style="font-size: 25px; color: gray;"></i> <span id="badge" class="badge alert-success" style="transition: opacity 0.3s ease;"></span>
+    </a>
+    <div class="dropdown-menu box dropdown-menu-end notifications">
+        <div class="topnav-dropdown-header">
+            <span class="notification-title">Notifications</span>
+            <!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+        </div>
+        <div class="noti-content" style="height: 400px; overflow-y: scroll;">
+            <ul class="notification-list" id="notifs">
+                <li class="notification-message">
+                    <a href="#">
+                        <div class="media">
+                            <p>aucune notification pour le moment</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- <div class="topnav-dropdown-footer">
+            <a href="#">Voir tous les notifications</a>
+        </div> -->
+    </div>
+</li>
+<!-- user -->
+<li class="nav-item dropdown has-arrow logged-item">
+    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+        <span class="user-img">
+            <img class="rounded-circle" src="{{u.img_medecin.url}}" width="31" alt="{{u.NomCabinet}}">
+        </span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-end">
+        <div class="user-header">
+            <div class="avatar avatar-sm">
+                <img src="{{u.img_medecin.url}}" alt="User Image" class="avatar-img rounded-circle">
+            </div>
+            <div class="user-text">
+                <h6>{{u.NomCabinet}}</h6>
+                <p class="text-muted mb-0">Médecin</p>
+            </div>
+        </div>
+        <a class="dropdown-item" href="{%url 'Dashboard'%}">Dashboard</a>
+        <a class="dropdown-item" href="{%url 'profile_doctor'%}">Paramètre du profile</a>
+        <a class="dropdown-item" href="{%url 'Logout'%}">Logout</a>
+    </div>
+</li>

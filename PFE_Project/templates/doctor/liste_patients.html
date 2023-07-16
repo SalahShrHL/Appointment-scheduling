@@ -1,0 +1,284 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block nav1%}
+		<a id="mobile_btn" href="javascript:void(0);">
+			<span class="bar-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</a>
+{%endblock%}
+
+{%block nav2%}
+    <div class="main-menu-wrapper">
+        <div class="menu-header">
+            <a href="#" class="menu-logo">
+                <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+            </a>
+            <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+        <ul class="main-nav">
+            <li class="extra">
+                <a href="#">
+                    <span class="user-img">
+                        <img class="rounded-circle" src="{{u.img_medecin.url}}" width="31" alt="{{u.NomCabinet}} {{p}">
+                    </span>
+                </a>
+            </li>
+            <li><a href="{%url 'H_doctor'%}">Acceuil</a></li>
+            <li class="active"><a href="{%url 'GetPatientList'%}">Patients</a></li>
+            <li><a href="{%url 'D_RV_LIST'%}">RDVs</a></li>
+            <li><a href="{%url 'GetTimingSchedual'%}">Horaire</a></li>
+            <li><a href="{%url 'GetAvis'%}">Avis</a></li>
+            <li class="extra"><a href="#">Notifications</a></li>
+		    <li class="extra"><a href="{%url 'Logout'%}">Log out</a></li>
+        </ul>		 
+    </div>
+{%endblock%}
+
+{%block nav3%}
+    {%include 'includes/header_doctor.html'%}
+{%endblock%}
+
+{%block Breadcrumb%}
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{%url 'H_doctor'%}">Accueil</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Patients</li>
+                        </ol>
+                    </nav>
+                    <h2 class="breadcrumb-title">Mes Patients</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{%block content%}
+{%include 'messages.html'%}
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+            
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="widget-profile pro-widget-content">
+                        <div class="profile-info-widget">
+                            <a href="#" class="booking-doc-img">
+                                <img src="{{u.img_medecin.url}}" alt="User Image">
+                            </a>
+                            <div class="profile-det-info">
+                                <h3>{{u.NomCabinet}}</h3>
+                                
+                                <div class="patient-details">
+                                    <h5 class="mb-0">{{u.addresse}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-widget">
+                        <nav class="dashboard-menu">
+                            <ul>
+                                <li>
+                                    <a href="{%url 'Dashboard'%}">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'D_RV_LIST'%}">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>Rendez_vous</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="{%url 'GetPatientList'%}">
+                                        <i class="fas fa-user-injured"></i>
+                                        <span>Patients</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetTimingSchedual'%}">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        <span>Horaire</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetAvis'%}">
+                                        <i class="fas fa-star"></i>
+                                        <span>Avis</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'profile_doctor'%}">
+                                        <i class="fas fa-user-cog"></i>
+                                        <span>paramètres du profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'Logout'%}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /Profile Sidebar -->
+                
+            </div>
+            <div class="col-md-7 col-lg-8 col-xl-9">
+            
+                <div class="row row-grid">
+                    {%for patient in P%}
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="card widget-profile pat-widget-profile">
+                                <div class="card-body">
+                                    <div class="pro-widget-content">
+                                        <div class="profile-info-widget">
+                                            <a href="javascript:void(0);" class="booking-doc-img">
+                                                <img src="{{patient.img_patient.url}}" alt="User Image">
+                                            </a>
+                                            <div class="profile-det-info">
+                                                <h3>{{patient.nomPatient}} {{patient.prenomPatient}}</h3>
+                                                
+                                                <div class="patient-details">
+                                                    <!-- <h5><b>Patient ID :</b> P0016</h5> -->
+                                                    <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i>{{patient.Address}}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="patient-info">
+                                        <ul>
+                                            <li>Téléphone <span>+213 {{patient.telephone}}</span></li>
+                                            <li>Age <span>{{ patient.age}}, {{patient.genre}}</span></li>
+                                            <li>Sang <span>{{patient.blood}}</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {%endfor%}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- side nav bar script -->
+<script>
+    var extras = document.getElementsByClassName('extra');
+    var w = window.innerWidth;
+    for(let i=0;i<extras.length;i++){
+        if(w <= 575){
+        extras[i].style.display = "list-item";
+        }
+        else{
+            extras[i].style.display = "none";
+        }
+    }
+    function addElementNav(){
+        var w = window.innerWidth;
+            var extras = document.getElementsByClassName('extra');
+            for(let i=0;i<extras.length;i++){
+                if(w <= 575){
+                extras[i].style.display = "list-item";
+                }
+                else{
+                    extras[i].style.display = "none";
+                }
+            }
+    }
+</script>
+
+<!-- notifications script -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm"  style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+<!-- /notifications script -->
+{%endblock%}

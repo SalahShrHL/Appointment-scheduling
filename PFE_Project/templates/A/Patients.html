@@ -1,0 +1,82 @@
+{%extends 'A/base.html'%}
+{%load static%}
+
+{%block sideBar%} 
+	<li> 
+		<a href="{%url 'H_admin'%}"><i class="fas fa-home" style="font-size: 20px;"></i> <span>Dashboard</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'specialitesAdmin'%}"><i class="fas fa-users" style="font-size: 20px;"></i> <span>Specialities</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'DoctorsAdmin'%}"><i class="fas fa-user-plus" style="font-size: 20px;"></i> <span>Médecins</span></a>
+	</li>
+	<li class="active"> 
+		<a href="{%url 'PatientsAdmin'%}"><i class="fas fa-user" style="font-size: 20px;"></i> <span>Patients</span></a>
+	</li>
+	<li> 
+		<a href="{%url 'Logout'%}"><i class="fas fa-sign-out-alt" style="font-size: 20px;"></i> <span>Logout</span></a>
+	</li>
+{%endblock%}
+
+{%block content%}
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+        
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">List des Patients</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{%url 'H_admin'%}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Patient</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <div class="table-responsive">
+                                <table class="datatable table table-hover table-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom Patient</th>
+                                            <th>Age</th>
+                                            <th>Address</th>
+                                            <th>Phone</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for patient in patients%}
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{patient.img_patient.url}}" alt="User Image"></a>
+                                                    <a href="#">{{patient.nomPatient}} {{patient.prenomPatient}}</a>
+                                                </h2>
+                                            </td>
+                                            <td>{{patient.age}}</td>
+                                            <td>{{patient.Address}}, {{patient.commune}}, {{patient.wilaya}}</td>
+                                            <td>{{patient.telephone}}</td>
+                                            <td>{{patient.emailPatient}}</td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>			
+            </div>
+            
+        </div>			
+    </div>
+{%endblock%}

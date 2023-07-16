@@ -1,0 +1,532 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block nav1%}
+		<a id="mobile_btn" href="javascript:void(0);">
+			<span class="bar-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</a>
+{%endblock%}
+
+{%block nav2%}
+	<div class="main-menu-wrapper">
+		<div class="menu-header">
+			<a href="#" class="menu-logo">
+				<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+			</a>
+			<a id="menu_close" class="menu-close" href="javascript:void(0);">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+		<ul class="main-nav">
+			<li class="active">
+				<a href="{%url 'H_patient'%}">Acceuil</a>
+			</li>
+			<li><a href="{%url 'FavDoc'%}">Meuilleure Cabinets</a></li>
+			<li><a href="{%url 'GetListRV'%}">RDVs</a></li>
+		</ul>		 
+	</div>
+{%endblock%}
+
+{%block nav3%}
+		<!-- Notifications -->
+		<li class="nav-item dropdown">
+			<a href="#" class="dropdown-toggle nav-link" onclick="delBadge()" data-toggle="dropdown" style="transition: all 0.3s;">
+				<i class="fas fa-bell" style="font-size: 25px; color: gray;"></i> <span id="badge" class="badge alert-success" style="transition: opacity 0.3s ease;"></span>
+			</a>
+			<div class="dropdown-menu box dropdown-menu-end notifications">
+				<div class="topnav-dropdown-header">
+					<span class="notification-title">Notifications</span>
+					<!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+				</div>
+				<div class="noti-content" style="height: 400px; overflow-y: scroll;">
+					<ul class="notification-list" id="notifs">
+						<li class="notification-message">
+							<a href="#">
+								<div class="media">
+									<p>pas de notifications pour le moment</p>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- <div class="topnav-dropdown-footer">
+					<a href="#">voir tous les Notifications</a>
+				</div> -->
+			</div>
+		</li>
+		<!-- /Notifications -->
+		
+		<!-- User Menu -->
+		<li class="nav-item dropdown has-arrow logged-item">
+            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <span class="user-img">
+                    <img class="rounded-circle" src="{{u.img_patient.url}}" width="31" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';">
+                </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+                <div class="user-header">
+                    <div class="avatar avatar-sm">
+                        <img src="{{u.img_patient.url}}" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';" class="avatar-img rounded-circle">
+                    </div>
+                    <div class="user-text">
+                        <h6>{{u.nomPatient}} {{u.prenomPatient}}</h6>
+                        <p class="text-muted mb-0">Patient</p>
+                    </div>
+                </div>
+                <a class="dropdown-item" href="{%url 'profil_patient'%}">Paramètres du profile</a>
+                <a class="dropdown-item" href="{%url 'Logout'%}">Logout</a>
+            </div>
+        </li>
+		<!-- /User Menu -->
+		
+	<!-- /User Menu -->
+{%endblock%}
+
+{%block Breadcrumb%}
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index-2.html">Acceuil</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Chercher Cabinet</li>
+                        </ol>
+                    </nav>
+                    <h2 class="breadcrumb-title">Profile de la cabinet</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{%block content%}
+<div class="content">
+    <div class="container">
+
+        <!-- Doctor Widget -->
+        <div class="card">
+            <div class="card-body">
+                <div class="doctor-widget">
+                    <div class="doc-info-left">
+                        <div class="doctor-img">
+                            <img src="{{m.img_medecin.url}}" class="img-fluid" alt="User Image">
+                        </div>
+                        <div class="doc-info-cont">
+                            <h4 class="doc-name">{{m.NomCabinet}}</h4>
+                            <p class="doc-speciality">{{m.addresse}}</p>
+                            <p class="doc-department">{{m.specialite}}</p>
+                            <div class="rating" data-rating="{{m.rating}}">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="d-inline-block average-rating">({{a.count}})</span>
+                            </div>
+                            <div class="clinic-details">
+                                <!-- <p class="doc-location"><i class="fas fa-map-marker-alt"></i> {{m.commune}}, {{m.wilaya}} </p> -->
+                                <ul class="clinic-gallery">
+                                    <li>
+                                        <a href="{{m.img1.url}}" data-fancybox="gallery">
+                                            <img src="{{m.img1.url}}" alt="Feature">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{m.img2.url}}" data-fancybox="gallery">
+                                            <img  src="{{m.img2.url}}" alt="Feature Image">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{m.img3.url}}" data-fancybox="gallery">
+                                            <img src="{{m.img3.url}}" alt="Feature">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doc-info-right">
+                        <div class="clini-infos"> 
+                            <ul>
+                                <li><i class="far fa-comment"></i> {{a.count}} avi</li>
+                                <li><i class="fas fa-map-marker-alt"></i> {{m.commune}}, {{m.wilaya}}</li>
+                                <li><i class="fas fa-phone-alt"></i> {{m.telephone}}</li>
+                            </ul>
+                        </div>
+                        <div class="doctor-action">
+                            {%if fav == True%}
+                                <a href="javascript:void(0)" id="bookmark" class="btn btn-red fav-btn" onclick="bookmark({{m.id}})">
+                                    <i class="far fa-bookmark"></i>
+                                </a>
+                            {%else%}
+                                <a href="javascript:void(0)" id="bookmark" class="btn btn-white fav-btn" onclick="bookmark({{m.id}})">
+                                    <i class="far fa-bookmark"></i>
+                                </a>
+                            {%endif%}
+                        </div>
+                        <div class="clinic-booking">
+                            <a class="apt-btn" href="{%url 'GetListRV' m.id%}">Prendre RDV</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Doctor Widget -->
+        
+        <!-- Doctor Details Tab -->
+        <div class="card">
+            <div class="card-body pt-0">
+            
+                <!-- Tab Menu -->
+                <nav class="user-tabs mb-4">
+                    <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#doc_overview" data-toggle="tab">Générale</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#doc_locations" data-toggle="tab">Localisation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#doc_reviews" data-toggle="tab">Avis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#doc_business_hours" data-toggle="tab">Horaires du Travail</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /Tab Menu -->
+                
+                <!-- Tab Content -->
+                <div class="tab-content pt-0">
+                
+                    <!-- Overview Content -->
+                    <div role="tabpanel" id="doc_overview" class="tab-pane fade show active">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-9">
+                                <!-- About Details -->
+                                <div class="widget about-widget">
+                                    <h4 class="widget-title">A propos de la cabinet</h4>
+                                    <p>{{m.biographie}}</p>
+                                </div>
+                                <!-- /About Details -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Overview Content -->
+                    
+                    <!-- Locations Content -->
+                    <div role="tabpanel" id="doc_locations" class="tab-pane fade">
+                    
+                        <!-- Location List -->
+                        <div class="location-list">
+                            <div class="row">
+                            
+                                <!-- Clinic Content -->
+                                <div class="col-md-6">
+                                    <div class="clinic-content">
+                                        <p class="doc-speciality" id="replace">{{m.addresse}}, {{m.commune}}, {{m.wilaya}}</p>
+                                        <!-- there will we here a div for embed map -->
+                                            {{m.googlemaps_iframe|safe}}
+                                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.34658986782!2d3.047973314913425!3d36.7622520799564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb36b3e0dfbdb%3A0xec52af9fe9a06008!2sMedecin%20A%20Domicile%20alger!5e0!3m2!1sen!2sdz!4v1653749905817!5m2!1sen!2sdz" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+                                    </div>
+                                </div>
+                                <!-- /Clinic Content -->
+                            </div>
+                        </div>
+                        <!-- /Location List -->
+                    </div>
+                    <!-- /Locations Content -->
+                    
+                    <!-- Reviews Content -->
+                    <div role="tabpanel" id="doc_reviews" class="tab-pane fade">
+                    
+                        <!-- Review Listing -->
+                        <div class="widget review-listing">
+                            <ul class="comments-list">
+                            
+                                <!-- Comment List -->
+                                {%if a.exists%}
+                                    {%for avi in a%}
+                                    <li>
+                                        <div class="comment">
+                                            <img class="avatar avatar-sm rounded-circle" alt="User Image" src="{{avi.patient.img_patient.url}}">
+                                            <div class="comment-body">
+                                                <div class="meta-data">
+                                                    <span class="comment-author">{{avi.patient.nomPatient}} {{avi.patient.prenomPatient}}</span>
+                                                    <span class="comment-date">{{avi.date}}</span>
+                                                    <div class="review-count rating" data-rating="{{avi.rating}}">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                    </div>
+                                                </div>
+                                                <p class="comment-content">
+                                                    {{avi.content}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {%endfor%}
+                                {%else%}
+                                    <p>pas d'avis pour le moments</p>
+                                {%endif%}
+                                
+                                <!-- /Comment List -->
+                                
+                            </ul>
+                            
+                            <!-- Show All -->
+                            <!-- <div class="all-feedback text-center">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    Show all feedback <strong>(167)</strong>
+                                </a>
+                            </div> -->
+                            <!-- /Show All -->
+                            
+                        </div>
+                        <!-- /Review Listing -->
+                    
+                        <!-- Write Review -->
+                        <div class="write-review">
+                            <h4>Ajouter un avi pour <strong>{{m.NomCabinet}}</strong></h4>
+                            
+                            <!-- Write Review Form -->
+                            <form method="POST" action="{%url 'Comment' m.id%}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Avi</label>
+                                    <div class="star-rating">
+                                        <input id="star-5" type="radio" name="rating" value="star-5">
+                                        <label for="star-5" title="5 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-4" type="radio" name="rating" value="star-4">
+                                        <label for="star-4" title="4 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-3" type="radio" name="rating" value="star-3">
+                                        <label for="star-3" title="3 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-2" type="radio" name="rating" value="star-2">
+                                        <label for="star-2" title="2 stars">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                        <input id="star-1" type="radio" name="rating" value="star-1">
+                                        <label for="star-1" title="1 star">
+                                            <i class="active fa fa-star"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Votre avi</label>
+                                    <textarea id="review_desc" maxlength="100" class="form-control" name="comment-content"></textarea>
+                                  
+                                  <div class="d-flex justify-content-between mt-3"><small class="text-muted"><span id="chars">100</span> caractères restantes</small></div>
+                                </div>
+                                <div class="submit-section">
+                                    <button type="submit" class="btn btn-primary submit-btn">Ajouter avi</button>
+                                </div>
+                            </form>
+                            <!-- /Write Review Form -->
+                            
+                        </div>
+                        <!-- /Write Review -->
+            
+                    </div>
+                    <!-- /Reviews Content -->
+                    
+                    <!-- Business Hours Content -->
+                    <div role="tabpanel" id="doc_business_hours" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
+                                <!-- Business Hours Widget -->
+                                <div class="widget business-widget">
+                                    <div class="widget-content">
+                                        <div class="listing-hours">
+                                            <div class="listing-day">
+                                                <div class="day">Dimenche</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Dimenche}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day">
+                                                <div class="day">Lundi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Lundi}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day">
+                                                <div class="day">Mardi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Mardi}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day">
+                                                <div class="day">Mercredi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Mercredi}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day">
+                                                <div class="day">Jeudi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Jeudi}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day">
+                                                <div class="day">Vendredi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Vendredi}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="listing-day closed">
+                                                <div class="day">Samedi</div>
+                                                <div class="time-items">
+                                                    <span class="time">{{Samedi}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Business Hours Widget -->
+                        
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Business Hours Content -->
+                    
+                </div>
+            </div>
+        </div>
+        <!-- /Doctor Details Tab -->
+
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-------------------------------------rating script--------------------------------------------->
+<script>
+    E = document.getElementsByClassName('rating');
+    for(let i=0;i<E.length;i++){
+        stars = E[i].children;
+        v = E[i].getAttribute('data-rating');
+        for(let j=0;j<v;j++){
+            stars[j].className += " filled";
+        }
+    }
+
+</script>
+
+<!-------------------------------------notifications script--------------------------------------------->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm" style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!------------------------------- bookmark script -------------------------------->
+<script>
+    function bookmark(id) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/Bookmark/'+id;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                icon = document.getElementById('bookmark');
+                if(icon.className == "btn btn-white fav-btn"){
+                    icon.className = "btn btn-red fav-btn";
+                }
+                else{
+                    icon.className = "btn btn-white fav-btn";
+                }
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+</script>
+{%endblock%}

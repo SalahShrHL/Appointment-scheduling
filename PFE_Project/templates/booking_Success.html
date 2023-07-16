@@ -1,0 +1,249 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block nav1%}
+		<a id="mobile_btn" href="javascript:void(0);">
+			<span class="bar-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</a>
+{%endblock%}
+
+{%block nav2%}
+	<div class="main-menu-wrapper">
+		<div class="menu-header">
+			<a href="#" class="menu-logo">
+				<img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+			</a>
+			<a id="menu_close" class="menu-close" href="javascript:void(0);">
+				<i class="fas fa-times"></i>
+			</a>
+		</div>
+		<ul class="main-nav">
+			<li class="active">
+				<a href="{%url 'H_patient'%}">Acceuil</a>
+			</li>
+			<li><a href="%url 'FavDoc'%}">Meuilleures Cabinets</a></li>
+			<li><a href="{%url 'GetListRV'%}">RDVs</a></li>
+		</ul>		 
+	</div>
+{%endblock%}
+
+{%block nav3%}
+    <!-- Notifications -->
+    <li class="nav-item dropdown">
+        <a href="#" class="dropdown-toggle nav-link" onclick="delBadge()" data-toggle="dropdown" style="transition: all 0.3s;">
+            <i class="fas fa-bell" style="font-size: 25px; color: gray;"></i> <span id="badge" class="badge alert-success" style="transition: opacity 0.3s ease;"></span>
+        </a>
+        <div class="dropdown-menu box dropdown-menu-end notifications">
+            <div class="topnav-dropdown-header">
+                <span class="notification-title">Notifications</span>
+                <!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+            </div>
+            <div class="noti-content" style="height: 400px; overflow-y: scroll;">
+                <ul class="notification-list" id="notifs">
+                    <li class="notification-message">
+                        <a href="#">
+                            <div class="media">
+                                <p>pas de notifications pour le moment</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- <div class="topnav-dropdown-footer">
+                <a href="#">voir tous les Notifications</a>
+            </div> -->
+        </div>
+    </li>
+    <!-- /Notifications -->
+	<!-- User Menu -->
+	<li class="nav-item dropdown has-arrow logged-item">
+		<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+			<span class="user-img">
+				<img class="rounded-circle" src="{{u.img_patient.url}}" width="31" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';">
+			</span>
+		</a>
+		<div class="dropdown-menu dropdown-menu-end">
+			<div class="user-header">
+				<div class="avatar avatar-sm">
+					<img src="{{u.img_patient.url}}" onerror="this.src='{%static 'assets/img/anonymous_user.jpg'%}';" class="avatar-img rounded-circle">
+				</div>
+				<div class="user-text">
+					<h6>{{u.nomPatient}} {{u.prenomPatient}}</h6>
+					<p class="text-muted mb-0">Patient</p>
+				</div>
+			</div>
+			<a class="dropdown-item" href="{%url 'profil_patient'%}">Paramètres du profile</a>
+			<a class="dropdown-item" href="{%url 'Logout'%}">Logout</a>
+		</div>
+	</li>
+	<!-- /User Menu -->
+{%endblock%}
+
+{%block Breadcrumb%}
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-12 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{%url 'H_patient'%}">Acceuil</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Chercher Cabinet</li>
+                        </ol>
+                    </nav>
+                    <h2 class="breadcrumb-title">Prendre RDV</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{%block content%}
+<div class="content success-page-cont">
+    <div class="container-fluid">
+    
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+            
+                <!-- Success Card -->
+                <div class="card success-card">
+                    <div class="card-body">
+                        <div class="success-cont">
+                            <i class="fas fa-check"></i>
+                            <h3>Votre RDV et confirmé</h3>
+                            <p>RDV à <strong>{{RV.medecin.NomCabinet}}</strong><br> on <strong>{{RV.french_Date}} à {{RV.french_time}}</strong></p>
+                            <a href="{%url 'H_patient'%}" class="btn btn-primary view-inv-btn">Acceuil</a>
+                            <a href="#" onclick="generatePDF()" class="btn btn-primary view-inv-btn">Imprimer</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Success Card -->
+                
+            </div>
+        </div>
+
+        <!-- content to print -->
+        <div class="row justify-content-center" >
+            <div class="col-lg-6">
+                <!-- <div class="d-flex justify-content-center">
+                    <a class="navbar-brand logo">
+                        <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+                    </a>
+                </div> -->
+                <div class="card success-card d-none">
+                    <div class="card-body">
+                        <div class="success-cont" id="toPDF">
+                            <br>
+                            <br>
+                            <br>
+                            <a class="navbar-brand logo">
+                                <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+                            </a>
+                            <h3>Confirmation du RDV</h3>
+                            <p>RDV chez <strong>{{RV.medecin.NomCabinet}}</strong><br> en <strong>{{RV.french_Date}} à {{RV.french_time}}</strong></p>
+                            <p>Pour Mr. <strong>{{RV.patient.nomPatient}} {{RV.patient.prenomPatient}}</strong></p>
+                            <hr style="border:none; border-top:1px dashed #f00; color: #fff; background-color: #fff; height: 1px; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- /content to print -->
+        
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- notifications -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm" style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!-- pdf generator -->
+<script src="{%static 'assets/js/html2pdf.js'%}"></script>
+<script>
+    function generatePDF(){
+        const element = document.getElementById('toPDF');
+
+        html2pdf()
+        .from(element)
+        .save()
+    }
+</script>
+{%endblock%}

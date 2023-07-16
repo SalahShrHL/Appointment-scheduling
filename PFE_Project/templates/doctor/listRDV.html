@@ -1,0 +1,476 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block nav1%}
+	<a id="mobile_btn" href="javascript:void(0);">
+		<span class="bar-icon">
+			<span></span>
+			<span></span>
+			<span></span>
+		</span>
+	</a>
+{%endblock%}
+
+{%block nav2%}
+<div class="main-menu-wrapper">
+    <div class="menu-header">
+        <a href="#" class="menu-logo">
+            <img src="{%static 'assets/img/logo.png'%}" class="img-fluid" alt="Logo">
+        </a>
+        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+            <i class="fas fa-times"></i>
+        </a>
+    </div>
+    <ul class="main-nav">
+        <li class="extra">
+            <a href="#">
+                <span class="user-img">
+                    <img class="rounded-circle" src="{{u.img_medecin.url}}" width="31" alt="{{u.NomCabinet}} {{p}">
+                </span>
+            </a>
+        </li>
+        <li><a href="{%url 'H_doctor'%}">Acceuil</a></li>
+        <li><a href="{%url 'GetPatientList'%}">Patients</a></li>
+        <li class="active"><a href="{%url 'D_RV_LIST'%}">RDVs</a></li>
+        <li><a href="{%url 'GetTimingSchedual'%}">Horaire</a></li>
+        <li><a href="{%url 'GetAvis'%}">Avis</a></li>
+        <li class="extra"><a href="#">Notifications</a></li>
+		<li class="extra"><a href="{%url 'Logout'%}">Logout</a></li>
+    </ul>		 
+</div>
+{%endblock%}
+
+{%block nav3%} 
+<!-- User Menu -->
+	{%include 'includes/header_doctor.html'%}
+<!-- /User Menu -->
+{%endblock%}
+
+{%block content%}
+{%include 'messages.html'%}
+<!-- Page Content -->
+<div class="content">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                
+                <!-- Profile Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="widget-profile pro-widget-content">
+                        <div class="profile-info-widget">
+                            <a href="#" class="booking-doc-img">
+                                <img src="{{u.img_medecin.url}}" alt="User Image">
+                            </a>
+                            <div class="profile-det-info">
+                                <h3>{{u.NomCabinet}}</h3>
+                                
+                                <div class="patient-details">
+                                    <h5 class="mb-0">{{u.addresse}}, {{u.commune}}, {{u.wilaya}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-widget">
+                        <nav class="dashboard-menu">
+                            <ul>
+                                <li>
+                                    <a href="{%url 'Dashboard'%}">
+                                        <i class="fas fa-columns"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="{%url 'D_RV_LIST'%}">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <span>RDVs</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetPatientList'%}">
+                                        <i class="fas fa-user-injured"></i>
+                                        <span>Patients</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetTimingSchedual'%}">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        <span>Horaire</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'GetAvis'%}">
+                                        <i class="fas fa-star"></i>
+                                        <span>Avis</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'profile_doctor'%}">
+                                        <i class="fas fa-user-cog"></i>
+                                        <span>Paramètres du profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{%url 'Logout'%}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /Profile Sidebar -->
+                
+            </div>
+
+            <div class="col-md-7 col-lg-8 col-xl-9">
+                <div class="card">
+                    
+                    <div class="appointment-tab">
+									
+                        <!-- Appointment Tab -->
+                        <div class="d-flex justify-content-between">
+                            <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#upcoming-appointments" data-toggle="tab">A venir</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#today-appointments" data-toggle="tab">Aujourd'hui</a>
+                                </li> 
+                            </ul>
+                            <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded" style="direction: rtl;">
+                                <li class="nav-item">
+                                    <a href="#" data-value="{{item.status}}" onclick="generatePDF()" class="btn btn-sm bg-primary-light RDV">
+                                        <i class="fas fa-print"></i> Imprimer
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- /Appointment Tab -->
+                        
+                        <div class="tab-content">
+                        
+                            <!-- Upcoming Appointment Tab -->
+                            <div class="tab-pane show active" id="upcoming-appointments">
+                                <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nom Patient</th>
+                                                        <th>Date</th>
+                                                        <th>Motif</th>
+                                                        <th>Status</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {%for item in list%}
+                                                        {%if item.dateRV != today%}
+                                                        <tr>
+                                                            <td>
+                                                                <h2 class="table-avatar">
+                                                                    <a href="javascript:void(0)" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{item.patient.img_patient.url}}" alt="User Image"></a>
+                                                                    <a href="javascript:void(0)">&nbsp;&nbsp;{{item.patient.nomPatient}} {{item.patient.prenomPatient}}</a>
+                                                                </h2>
+                                                            </td>
+                                                            <td>{{item.french_Date}}<span class="d-block text-info">{{item.french_time}}</span></td>
+                                                            <td>{{item.type_consultation.motif}}</td>
+                                                            {%if item.status == 'confirmé'%}
+                                                            <td><span class="badge badge-pill bg-primary-light">confirmé</span></td>
+                                                            <td class="text-right">
+                                                                <div class="table-action">
+                                                                    <a href="#annuler_RDV" onclick="annulerRDV(event)" data-id = "{{item.id}}" data-toggle="modal" data-value="{{item.status}}" class="btn btn-sm bg-danger-light">
+                                                                        <i class="fas fa-times"></i> Annuler
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            {%else%}
+                                                                <td><span class="badge badge-pill bg-danger-light">annulé</span></td>
+                                                            {%endif%}
+                                                        </tr>
+                                                        {%endif%}
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>		
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Upcoming Appointment Tab -->
+                       
+                            <!-- Today Appointment Tab -->
+                            <div class="tab-pane" id="today-appointments">
+                                <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nom Patient</th>
+                                                        <th>Date</th>
+                                                        <th>Motif</th>
+                                                        <th>status</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {%for item in list%}
+                                                    {%if item.dateRV == today%}
+                                                    <tr>
+                                                        <td>
+                                                            <h2 class="table-avatar">
+                                                                <a href="#" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{item.patient.img_patient.url}}" alt="User Image"></a>
+                                                                <a href="#">&nbsp;&nbsp;{{item.patient.nomPatient}} {{item.patient.prenomPatient}}</a>
+                                                            </h2>
+                                                        </td>
+                                                        <td>{{item.french_Date}} <span class="d-block text-info">{{item.french_time}}</span></td>
+                                                        <td>{{item.type_consultation.motif}}</td>
+                                                        <!-- <td>{{item.status}}</td> -->
+                                                        {%if item.status == 'confirmé'%}
+                                                            <td><span class="badge badge-pill bg-primary-light">confirmé</span></td>
+                                                            <td class="text-right">
+                                                                <div class="table-action">
+                                                                    <a href="#annuler_RDV" onclick="annulerRDV(event)" data-id = "{{item.id}}" data-toggle="modal" data-value="{{item.status}}" class="btn btn-sm bg-danger-light">
+                                                                        <i class="fas fa-times"></i> Annuler
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        {%else%}
+                                                            <td><span class="badge badge-pill bg-danger-light">annulé</span></td>
+                                                        {%endif%}
+                                                    </tr>
+                                                    {%endif%}
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>		
+                                        </div>	
+                                    </div>	
+                                </div>	
+                            </div>
+                            <!-- /Today Appointment Tab -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- content to print -->
+        <div class="row d-flex justify-content-center d-none">
+            
+            <div class="col-md-7 col-lg-8 col-xl-9">
+                <div class="card" id="toPDF">
+                    <br>
+                    <h3>&nbsp;&nbsp;les RDVs aujourd'hui</h3>
+                    <div class="appointment-tab">
+									
+                        <div class="tab-content">
+                        
+                            <!-- Upcoming Appointment Tab -->
+                            <div class="tab-pane show active" id="upcoming-appointments">
+                                <div class="card card-table mb-0">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-center mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nom Patient</th>
+                                                        <th>Date</th>
+                                                        <th>Motif</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {%for item in list%}
+                                                        {%if item.dateRV == today%}
+                                                        <tr>
+                                                            <td>{{item.patient.nomPatient}} {{item.patient.prenomPatient}}</td>
+                                                            <td>{{item.french_Date}}<span class="d-block text-info">{{item.french_time}}</span></td>
+                                                            <td>{{item.type_consultation.motif}}</td>
+                                                            {%if item.status == 'confirmé'%}
+                                                            <td><span class="badge badge-pill bg-primary-light">confirmé</span></td>
+                                                            {%else%}
+                                                                <td><span class="badge badge-pill bg-danger-light">annulé</span></td>
+                                                            {%endif%}
+                                                        </tr>
+                                                        {%endif%}
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>		
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Upcoming Appointment Tab -->
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /content to print -->
+
+    </div>
+
+</div>		
+<!-- /Page Content -->
+{%endblock%}
+
+{%block PlugIn%}
+<div class="modal fade custom-modal" id="annuler_RDV">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Annuler le Rendez_vous</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-summary">
+                    <p style="font-size: 16px;">voulez vous vraiment annuler çe rendez_vous?</p>
+                </div>
+                <form method="POST" action="{%url 'AnnulerRDV'%}">
+                    <!-- <input autocomplete="false" name="hidden" type="text" style="display:none;"> -->
+                    {% csrf_token %}
+                    <input type="text" id="id_RDV" style="display: none;" name="ID_RDV">
+                    <div class="booking-item-wrap">
+                        <div class="submit-section text-center">
+                            <button type="submit" class="btn btn-danger submit-btn">Annuler le RDV</button>
+                            <button type="button" class="btn btn-primary submit-btn" data-dismiss="modal" aria-label="Close">Non</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<!-- notifications -->
+<script>
+    var img_url="";
+    function delBadge(){
+        var badge = document.getElementById('badge');
+        badge.style.opacity = 0;
+        setTimeout(function(){
+            badge.style.display = 'none';
+        }, 350)
+    }
+    function dayOfWeek(date){
+        week = ["dimenche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+        return week[date];
+    }
+    function run(notitification, element, date) {
+  
+        // Creating Our XMLHttpRequest object 
+        var xhr = new XMLHttpRequest();
+
+        // Making our connection  
+        var url = 'http://127.0.0.1:8000/getUser/'+notitification.fields.sender;
+        xhr.open("GET", url, true);
+
+        // function execute after request is successful 
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                parser = new DOMParser();
+                a = parser.parseFromString(this.responseText,"text/xml");
+                img_url = a.getElementsByTagName("object")[0].childNodes[0].childNodes[0].nodeValue
+                img_url = "http://127.0.0.1:8000/media/" + img_url;
+                element.innerHTML +='<li class="notification-message nothing">'
+                                    +	'<a href="#">'
+                                    +		'<div class="media">'
+                                    +			'<span class="avatar avatar-sm"  style="min-width:40px;">'
+                                    +				'<img class="avatar-img rounded-circle" alt="User Image" src="'+img_url+'"></img>'
+                                    +			'</span>'
+                                    +			'<div class="media-body">'
+                                    +				'<p class="noti-details">'+notitification.fields.content+'</p>'
+                                    +				'<p class="noti-time"><span class="notification-time">'+dayOfWeek(date.getDay())+' '+date.getDate()+'-'+date.getMonth()+'-'+date.getFullYear()+'</span></p>'
+                                    +			'</div>'
+                                    +		'</div>'
+                                    +	'</a>'
+                                    +'</li>';
+            }
+        }
+        // Sending our request 
+        xhr.send();
+    }
+    function prep_notif(){
+        if( !{{empty}}){
+            var element = document.getElementById('notifs');
+            var badge = document.getElementById('badge');
+            var notifs = JSON.parse('{{notif|safe}}');
+            var nbr_news=0;
+            for(let i=0; i<notifs.length; i++){
+                if(notifs[i].fields.new == true) nbr_news++;
+            }
+            if(nbr_news == 0){
+                delBadge()
+            }
+            else{
+                badge.innerHTML = nbr_news;
+            }
+            var max = 4;
+            if(nbr_news > 4) max = nbr_news;
+            element.innerHTML = "";
+            for(let i=0; i<notifs.length; i++){
+                var temp = Date.parse(notifs[i].fields.Date);
+                var date = new Date(temp);
+                run(notifs[i], element, date);
+            }
+        }
+    }
+    
+</script>
+
+<!-- side nav bar script -->
+<script>
+    var extras = document.getElementsByClassName('extra');
+    var w = window.innerWidth;
+    for(let i=0;i<extras.length;i++){
+        if(w <= 575){
+        extras[i].style.display = "list-item";
+        }
+        else{
+            extras[i].style.display = "none";
+        }
+    }
+    function addElementNav(){
+        var w = window.innerWidth;
+            var extras = document.getElementsByClassName('extra');
+            for(let i=0;i<extras.length;i++){
+                if(w <= 575){
+                extras[i].style.display = "list-item";
+                }
+                else{
+                    extras[i].style.display = "none";
+                }
+            }
+    }
+</script>
+
+<!-- annuler RDV -->
+<script>
+    function annulerRDV(event){
+    document.getElementById('id_RDV').value = event.target.getAttribute('data-id');
+}
+</script>
+
+<!-- pdf generator -->
+<script src="{%static 'assets/js/html2pdf.js'%}"></script>
+<script>
+    function generatePDF(){
+        const element = document.getElementById('toPDF');
+
+        html2pdf()
+        .from(element)
+        .save()
+    }
+</script>
+{%endblock%}
